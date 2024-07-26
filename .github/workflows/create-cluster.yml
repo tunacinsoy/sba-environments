@@ -13,29 +13,31 @@ jobs:
         working-directory: ./terraform
     steps:
       - uses: actions/checkout@v2
+
       - name: Install Terraform
         id: install-terraform
-        run: wget -O terraform.zip https://releases.hashicorp.com/terraform/1.5.5/terraform_1.5.5_linux_amd64.zip && unzip terraform.zip && chmod +x terraform && sudo mv terraform /usr/local/bin
+        run: |
+          wget -O terraform.zip https://releases.hashicorp.com/terraform/1.5.5/terraform_1.5.5_linux_amd64.zip
+          unzip terraform.zip
+          chmod +x terraform
+          sudo mv terraform /usr/local/bin
+
       - name: Get Tag Name
         id: get_tag
         run: echo "::set-output name=tag::$(echo ${GITHUB_REF#refs/tags/})"
-      # - name: Set Operation Mode
-      #   id: set-operation-mode
-      #   run: |
-      #     if [[ "${GITHUB_REF}" == refs/tags/destroy-* ]]; then
-      #       echo "OPERATION=destroy" >> $GITHUB_ENV
-      #     else
-      #       echo "OPERATION=apply" >> $GITHUB_ENV
+
       - name: Terraform Init
         id: terraform-init
         run: terraform init -backend-config="bucket=tf-state-${{ secrets.PROJECT_ID }}"
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+
       - name: Terraform Workspace
         id: terraform-workspace
         run: terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+
       - name: Terraform Destroy
         id: terraform_destroy
         if: contains(steps.get_tag.outputs.tag, 'destroy')
@@ -53,12 +55,3 @@ jobs:
           terraform apply -auto-approve -var="project_id=${{ secrets.PROJECT_ID }}" -var="branch=${GITHUB_REF##*/}"
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-      # - name: Terraform Apply or Destroy
-      #   id: terraform-apply-destroy
-      #   run: |
-      #     if [ "${{ env.OPERATION }}" = "destroy" ]; then
-      #       terraform destroy -auto-approve -var="project_id=${{ secrets.PROJECT_ID }}" -var="branch=${GITHUB_REF##*/}"
-      #     else
-      #       terraform apply -auto-approve -var="project_id=${{ secrets.PROJECT_ID }}" -var="branch=${GITHUB_REF##*/}"
-      #   env:
-      #     GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
