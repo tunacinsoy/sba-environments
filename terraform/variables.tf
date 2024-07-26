@@ -16,12 +16,6 @@ variable "zone" {
   default     = "me-west1-b"
 }
 
-# For terraform backend "gcs"
-variable "prefix" {
-  description = "prefix for remote backend for terraform state files"
-  type        = string
-  default     = "sba-terraform"
-}
 
 # For resource google_service_account.main
 variable "cluster_name" {
