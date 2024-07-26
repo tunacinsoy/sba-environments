@@ -1,12 +1,9 @@
 name: Manage Kubernetes Cluster
 
 on:
-  workflow_dispatch:
-    inputs:
-      operation:
-        description: "Operation to perform (apply or destroy)"
-        required: true
-        default: "apply"
+  push:
+    tags:
+      - "destroy-*" # This pattern will match tags starting with 'destroy-'
 
 jobs:
   deploy-terraform:
@@ -21,7 +18,11 @@ jobs:
         run: wget -O terraform.zip https://releases.hashicorp.com/terraform/1.5.5/terraform_1.5.5_linux_amd64.zip && unzip terraform.zip && chmod +x terraform && sudo mv terraform /usr/local/bin
       - name: Set Operation Mode
         id: set-operation-mode
-        run: echo "OPERATION=${{ github.event.inputs.operation }}" >> $GITHUB_ENV
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/destroy-* ]]; then
+            echo "OPERATION=destroy" >> $GITHUB_ENV
+          else
+            echo "OPERATION=apply" >> $GITHUB_ENV
       - name: Terraform Init
         id: terraform-init
         run: terraform init -backend-config="bucket=tf-state-${{ secrets.PROJECT_ID }}"
