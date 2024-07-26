@@ -1,5 +1,13 @@
-name: Create Kubernetes Cluster
-on: push
+name: Manage Kubernetes Cluster
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: "Operation to perform (apply or destroy)"
+        required: true
+        default: "apply"
+
 jobs:
   deploy-terraform:
     runs-on: ubuntu-latest
@@ -11,9 +19,25 @@ jobs:
       - name: Install Terraform
         id: install-terraform
         run: wget -O terraform.zip https://releases.hashicorp.com/terraform/1.5.5/terraform_1.5.5_linux_amd64.zip && unzip terraform.zip && chmod +x terraform && sudo mv terraform /usr/local/bin
-      - name: Apply Terraform
-        id: apply-terraform
-        run: terraform init -backend-config="bucket=tf-state-${{ secrets.PROJECT_ID }}" && terraform workspace select ${GITHUB_REF##*/} ||  terraform workspace new ${GITHUB_REF##*/} && terraform apply -auto-approve -var="project_id=${{ secrets.PROJECT_ID  }}" -var="branch=${GITHUB_REF##*/}"
-        # Provider google will get the credentials from env variable called GCP_CREDENTIALS
+      - name: Set Operation Mode
+        id: set-operation-mode
+        run: echo "OPERATION=${{ github.event.inputs.operation }}" >> $GITHUB_ENV
+      - name: Terraform Init
+        id: terraform-init
+        run: terraform init -backend-config="bucket=tf-state-${{ secrets.PROJECT_ID }}"
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Terraform Workspace
+        id: terraform-workspace
+        run: terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Terraform Apply or Destroy
+        id: terraform-apply-destroy
+        run: |
+          if [ "${{ env.OPERATION }}" = "destroy" ]; then
+            terraform destroy -auto-approve -var="project_id=${{ secrets.PROJECT_ID }}" -var="branch=${GITHUB_REF##*/}"
+          else
+            terraform apply -auto-approve -var="project_id=${{ secrets.PROJECT_ID }}" -var="branch=${GITHUB_REF##*/}"
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
