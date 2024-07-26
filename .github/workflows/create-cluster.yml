@@ -26,6 +26,12 @@ jobs:
         id: get_tag
         run: echo "::set-output name=tag::$(echo ${GITHUB_REF#refs/tags/})"
 
+      - name: Get Branch Name
+        id: get_branch
+        run: |
+          branch=$(git branch --contains $(git rev-parse ${GITHUB_SHA}) | sed -n -e 's/^\* \(.*\)/\1/p')
+          echo "::set-output name=branch::${branch}"
+
       - name: Terraform Init
         id: terraform-init
         run: terraform init -backend-config="bucket=tf-state-${{ secrets.PROJECT_ID }}"
@@ -43,7 +49,7 @@ jobs:
         if: contains(steps.get_tag.outputs.tag, 'destroy')
         run: |
           echo "Running destroy steps"
-          terraform destroy -auto-approve -var="project_id=${{ secrets.PROJECT_ID }}" -var="branch=${GITHUB_REF##*/}"
+          terraform destroy -auto-approve -var="project_id=${{ secrets.PROJECT_ID }}" -var="branch=${{ steps.get_branch.outputs.branch }}"
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 
@@ -52,6 +58,6 @@ jobs:
         if: "!contains(steps.get_tag.outputs.tag, 'destroy')"
         run: |
           echo "Running apply steps"
-          terraform apply -auto-approve -var="project_id=${{ secrets.PROJECT_ID }}" -var="branch=${GITHUB_REF##*/}"
+          terraform apply -auto-approve -var="project_id=${{ secrets.PROJECT_ID }}" -var="branch=${{ steps.get_branch.outputs.branch }}"
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
