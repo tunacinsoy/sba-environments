@@ -2,6 +2,8 @@ name: Manage Kubernetes Cluster
 
 on:
   push:
+    branches:
+      - main
     tags:
       - "destroy-*" # This pattern will match tags starting with 'destroy-'
 
