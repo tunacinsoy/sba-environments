@@ -19,8 +19,10 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Ignore sensitive environment variables file
+# Ignore sensitive variables file
 .env
+*.tfvars
+*.json
 
 # Ignore any temporary files
 *.log
