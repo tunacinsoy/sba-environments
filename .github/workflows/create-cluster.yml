@@ -13,7 +13,7 @@ jobs:
         run: wget -O terraform.zip https://releases.hashicorp.com/terraform/1.5.5/terraform_1.5.5_linux_amd64.zip && unzip terraform.zip && chmod +x terraform && sudo mv terraform /usr/local/bin
       - name: Apply Terraform
         id: apply-terraform
-        run: terraform init -backend-config="bucket=tf-state-sba-terraform-${{ secrets.PROJECT_ID }}" && terraform workspace select ${GITHUB_REF##*/} ||  terraform workspace new ${GITHUB_REF##*/} && terraform apply -auto-approve -var="project_id=${{ secrets.PROJECT_ID  }}" -var="branch=${GITHUB_REF##*/}"
+        run: terraform init -backend-config="bucket=tf-state-${{ secrets.PROJECT_ID }}" && terraform workspace select ${GITHUB_REF##*/} ||  terraform workspace new ${GITHUB_REF##*/} && terraform apply -auto-approve -var="project_id=${{ secrets.PROJECT_ID  }}" -var="branch=${GITHUB_REF##*/}"
         # Provider google will get the credentials from env variable called GCP_CREDENTIALS
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
