@@ -40,7 +40,7 @@ jobs:
 
       - name: Terraform Workspace
         id: terraform-workspace
-        run: terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
+        run: terraform workspace select ${{ steps.get_branch.outputs.branch }} || terraform workspace new ${{ steps.get_branch.outputs.branch }}
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 
