@@ -2,6 +2,10 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: argo-apps
+  # ApplicationSet resource will be deployed to argocd namespace,
+  # not the applications which will argocd manage.
+  # Each application will define which namespace they will be located in
+  # within their respective manifest files.
   namespace: argocd
 spec:
   generators:
@@ -15,6 +19,7 @@ spec:
         exclude: true
   template:
     metadata:
+    # Application name will be the folder name, for instance 'sealed-secrets'
       name: '{{path.basename}}'
     spec:
       project: default

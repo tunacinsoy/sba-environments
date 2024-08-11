@@ -25,7 +25,7 @@ terraform {
   }
   backend "gcs" {
     # Terraform state files will be located in the following path:
-    # tf-state-sba-terraform-${{ secrets.PROJECT_ID }}/sba-terraform/terraform.tfstateenv:${GITHUB_REF##*/}
+    # tf-state-sba-terraform-${{ secrets.PROJECT_ID }}/sba-terraform/${GITHUB_REF##*/}.tfstate
     prefix = "sba-terraform"
   }
 }
