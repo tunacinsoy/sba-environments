@@ -1,10 +1,5 @@
-name: Manage Kubernetes Cluster
-
-on:
-  push:
-    tags:
-      - "*"
-
+name: Create Kubernetes Cluster
+on: push
 jobs:
   deploy-terraform:
     runs-on: ubuntu-latest
@@ -12,52 +7,12 @@ jobs:
       run:
         working-directory: ./terraform
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Install Terraform
-        id: install-terraform
-        run: |
-          wget -O terraform.zip https://releases.hashicorp.com/terraform/1.5.5/terraform_1.5.5_linux_amd64.zip
-          unzip terraform.zip
-          chmod +x terraform
-          sudo mv terraform /usr/local/bin
-
-      - name: Get Tag Name
-        id: get_tag
-        run: echo "::set-output name=tag::$(echo ${GITHUB_REF#refs/tags/})"
-
-      - name: Get Branch Name
-        id: get_branch
-        run: |
-          branch=$(git branch --contains $(git rev-parse ${GITHUB_SHA}) | sed -n -e 's/^\* \(.*\)/\1/p')
-          echo "::set-output name=branch::${branch}"
-
-      - name: Terraform Init
-        id: terraform-init
-        run: terraform init -backend-config="bucket=tf-state-${{ secrets.PROJECT_ID }}"
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Terraform Workspace
-        id: terraform-workspace
-        run: terraform workspace select ${{ steps.get_branch.outputs.branch }} || terraform workspace new ${{ steps.get_branch.outputs.branch }}
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Terraform Destroy
-        id: terraform_destroy
-        if: contains(steps.get_tag.outputs.tag, 'destroy')
-        run: |
-          echo "Running destroy steps"
-          terraform destroy -auto-approve -var="project_id=${{ secrets.PROJECT_ID }}" -var="branch=${{ steps.get_branch.outputs.branch }}"
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Terraform Apply
-        id: terraform_apply
-        if: "!contains(steps.get_tag.outputs.tag, 'destroy')"
-        run: |
-          echo "Running apply steps"
-          terraform apply -auto-approve -var="project_id=${{ secrets.PROJECT_ID }}" -var="branch=${{ steps.get_branch.outputs.branch }}"
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+    - uses: actions/checkout@v2
+    - name: Install Terraform
+      id: install-terraform
+      run: wget -O terraform.zip https://releases.hashicorp.com/terraform/1.9.4/terraform_1.9.4_linux_amd64.zip && unzip terraform.zip && chmod +x terraform && sudo mv terraform /usr/local/bin
+    - name: Apply Terraform
+      id: apply-terraform
+      run: terraform init -backend-config="bucket=tf-state-sba-terraform-${{ secrets.PROJECT_ID }}" && terraform workspace select ${GITHUB_REF##*/} ||  terraform workspace new ${GITHUB_REF##*/} && terraform apply -auto-approve -var="project_id=${{ secrets.PROJECT_ID  }}" -var="branch=${GITHUB_REF##*/}"
+      env:
+        GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
