@@ -1,6 +1,9 @@
 # This variable will be initialized from cli using --vars flag
 # during the workflow process. It will be retrived from repository secrets.
-variable "project_id" {}
+variable "project_id" {
+  description = "Google Cloud Project ID"
+  type        = string
+}
 
 # For provider "google"
 variable "region" {
@@ -16,7 +19,6 @@ variable "zone" {
   default     = "me-west1-b"
 }
 
-
 # For resource google_service_account.main
 variable "cluster_name" {
   type        = string
@@ -24,8 +26,8 @@ variable "cluster_name" {
   default     = "sba-cluster"
 }
 
-# This variable will be initialized from cli using --vars flag
-# during the workflow process. It will be retrieved from current branch name.
+# This variable will be initialized from cli using --vars flag during the workflow process.
+# It will be retrieved from current branch name.
 # For resource google_service_account.main
 variable "branch" {
   description = "Git Branch Name"
