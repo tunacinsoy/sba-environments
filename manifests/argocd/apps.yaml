@@ -10,6 +10,7 @@ spec:
       revision: HEAD
       directories:
       - path: manifests/*
+      # We do not want argocd to manage itself
       - path: manifests/argocd
         exclude: true
   template:
