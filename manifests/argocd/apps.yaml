@@ -11,6 +11,8 @@ spec:
   generators:
   - git:
       repoURL: https://github.com/tunacinsoy/sba-environments.git
+      # revision: HEAD will be converted into branch name during workflow process.
+      # It means that the generator will use the latest commit on the default branch of the specified repository
       revision: HEAD
       directories:
       - path: manifests/*
@@ -25,6 +27,8 @@ spec:
       project: default
       source:
         repoURL: https://github.com/tunacinsoy/sba-environments.git
+        # targetRevision: HEAD will be updated with the branch name during workflow process.
+        # It specifies which Git reference Argo CD should deploy for each application.
         targetRevision: HEAD
         path: '{{path}}'
       destination:
