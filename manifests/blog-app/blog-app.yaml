@@ -76,7 +76,7 @@ spec:
     spec:
       containers:
         - name: posts
-          image: tunacinsoy/sba-posts:v1.0.1-2024.07.23.16.18-6a17a04
+          image: tunacinsoy/sba-posts:v1.0.2-2024.08.13.10.13-13aa5d7
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
@@ -122,7 +122,7 @@ spec:
     spec:
       containers:
         - name: reviews
-          image: tunacinsoy/sba-reviews:v1.0.0-2024.07.21.14.33-ad28403
+          image: tunacinsoy/sba-reviews:v1.0.1-2024.08.13.13.26-14eb5db
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
@@ -168,7 +168,7 @@ spec:
     spec:
       containers:
         - name: ratings
-          image: tunacinsoy/sba-ratings:v1.0.0-2024.07.21.14.51-b2b217c
+          image: tunacinsoy/sba-ratings:v1.0.1-2024.08.13.10.25-5fede77
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
@@ -214,7 +214,7 @@ spec:
     spec:
       containers:
         - name: users
-          image: tunacinsoy/sba-users:v1.0.0-2024.07.21.14.39-73cae01
+          image: tunacinsoy/sba-users:v1.0.1-2024.08.13.13.18-9cb9c64
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
@@ -260,7 +260,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: tunacinsoy/sba-frontend:v1.0.0-2024.07.21.14.50-85bd1dd
+          image: tunacinsoy/sba-frontend:v1.0.2-2024.08.13.13.13-fe6be43
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
