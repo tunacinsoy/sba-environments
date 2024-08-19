@@ -1,4 +1,4 @@
-# This file is responsible for the creation of gke cluster and a service account.
+# This file is responsible for the creation of gke cluster, and a service account.
 
 resource "google_service_account" "main" {
   # Since there will be two clusters for 'prod' and 'dev' envs, we need to be able to
