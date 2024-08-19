@@ -169,7 +169,7 @@ spec:
     spec:
       containers:
         - name: ratings
-          image: tunacinsoy/sba-ratings:v1.0.1-2024.08.13.10.25-5fede77
+          image: tunacinsoy/sba-ratings:08d7e4d
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
