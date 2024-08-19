@@ -15,21 +15,6 @@ resource "kubectl_manifest" "apps" {
   # Forces the namespace to be set to argocd, ensuring that all resources are created in the correct namespace
   override_namespace = "argocd"
 }
-# MANAGING SECRETS USING Sealed Secrets
-data "kubectl_file_documents" "sealed-secrets" {
-  content = file("../manifests/argocd/controller.yaml")
-}
-
-resource "kubectl_manifest" "sealed-secrets" {
-  # It needs to depend on argocd creation, since we'll deploy external-secrets right after argocd gets created
-  depends_on = [kubectl_manifest.argocd]
-  # for_each iterates over each manifest in the namespace file
-  for_each = data.kubectl_file_documents.sealed-secrets.manifests
-  # Applies the content of each manifest to the Kubernetes cluster
-  yaml_body = each.value
-  # Forces the namespace to be set to argocd, ensuring that all resources are created in the correct namespace
-  override_namespace = "argocd"
-}
 
 # MANAGING SECRETS USING External Secrets
 # # External-Secrets operator for the retrieval of secrets
