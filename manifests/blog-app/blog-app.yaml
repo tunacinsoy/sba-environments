@@ -77,7 +77,7 @@ spec:
     spec:
       containers:
         - name: posts
-          image: tunacinsoy/sba-posts:v1.0.2-2024.08.13.10.13-13aa5d7
+          image: tunacinsoy/sba-posts:83047ac
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
