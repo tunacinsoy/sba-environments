@@ -261,7 +261,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: tunacinsoy/sba-frontend:v1.0.2-2024.08.13.13.13-fe6be43
+          image: tunacinsoy/sba-frontend:2aea612
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
