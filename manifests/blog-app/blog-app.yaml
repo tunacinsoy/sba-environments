@@ -215,7 +215,7 @@ spec:
     spec:
       containers:
         - name: users
-          image: tunacinsoy/sba-users:v1.0.1-2024.08.13.13.18-9cb9c64
+          image: tunacinsoy/sba-users:ddf2a8e
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
