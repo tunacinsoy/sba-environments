@@ -15,34 +15,50 @@ resource "kubectl_manifest" "apps" {
   # Forces the namespace to be set to argocd, ensuring that all resources are created in the correct namespace
   override_namespace = "argocd"
 }
-
-# External-Secrets operator for the retrieval of secrets
-data "kubectl_file_documents" "external-secrets" {
-  content = file("../manifests/argocd/external-secrets.yaml")
+# MANAGING SECRETS USING Sealed Secrets
+data "kubectl_file_documents" "sealed-secrets" {
+  content = file("../manifests/argocd/controller.yaml")
 }
 
-resource "kubectl_manifest" "external-secrets" {
+resource "kubectl_manifest" "sealed-secrets" {
   # It needs to depend on argocd creation, since we'll deploy external-secrets right after argocd gets created
   depends_on = [kubectl_manifest.argocd]
   # for_each iterates over each manifest in the namespace file
-  for_each = data.kubectl_file_documents.external-secrets.manifests
+  for_each = data.kubectl_file_documents.sealed-secrets.manifests
   # Applies the content of each manifest to the Kubernetes cluster
   yaml_body = each.value
   # Forces the namespace to be set to argocd, ensuring that all resources are created in the correct namespace
   override_namespace = "argocd"
 }
 
-# File that holds the secret resource that have service account credentials
-# and clusterSecretStore resource that uses credentials to retrieve external secrets
-data "kubectl_file_documents" "gcpsm-secret" {
-    content = file("../manifests/argocd/gcpsm-secret.yaml")
-}
+# MANAGING SECRETS USING External Secrets
+# # External-Secrets operator for the retrieval of secrets
+# data "kubectl_file_documents" "external-secrets" {
+#   content = file("../manifests/argocd/external-secrets.yaml")
+# }
 
-resource "kubectl_manifest" "gcpsm-secrets" {
-  depends_on = [
-    kubectl_manifest.external-secrets,
-  ]
-  for_each  = data.kubectl_file_documents.gcpsm-secret.manifests
-  yaml_body = each.value
-}
+# resource "kubectl_manifest" "external-secrets" {
+#   # It needs to depend on argocd creation, since we'll deploy external-secrets right after argocd gets created
+#   depends_on = [kubectl_manifest.argocd]
+#   # for_each iterates over each manifest in the namespace file
+#   for_each = data.kubectl_file_documents.external-secrets.manifests
+#   # Applies the content of each manifest to the Kubernetes cluster
+#   yaml_body = each.value
+#   # Forces the namespace to be set to argocd, ensuring that all resources are created in the correct namespace
+#   override_namespace = "argocd"
+# }
+
+# # File that holds the secret resource that have service account credentials
+# # and clusterSecretStore resource that uses credentials to retrieve external secrets
+# data "kubectl_file_documents" "gcpsm-secret" {
+#     content = file("../manifests/argocd/gcpsm-secret.yaml")
+# }
+
+# resource "kubectl_manifest" "gcpsm-secrets" {
+#   depends_on = [
+#     kubectl_manifest.external-secrets,
+#   ]
+#   for_each  = data.kubectl_file_documents.gcpsm-secret.manifests
+#   yaml_body = each.value
+# }
 

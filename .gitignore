@@ -28,3 +28,6 @@ terraform.rc
 *.log
 *.out
 *.tmp
+
+# If we want to use sealed-secrets, this should be here
+./manifests/blog-app/mongodb-creds-external.yaml
