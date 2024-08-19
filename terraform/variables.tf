@@ -9,14 +9,14 @@ variable "project_id" {
 variable "region" {
   description = "region where the resources will be deployed"
   type        = string
-  default     = "me-west"
+  default     = "europe-central2"
 }
 
 # For provider "google"
 variable "zone" {
   description = "zone where the resources will be deployed"
   type        = string
-  default     = "me-west1-b"
+  default     = "europe-central2-b"
 }
 
 # For resource google_service_account.main
@@ -39,5 +39,5 @@ variable "branch" {
 variable "location" {
   type        = string
   description = "GKE Cluster Location"
-  default     = "me-west1-b"
+  default     = "europe-central2-b"
 }

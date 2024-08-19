@@ -16,7 +16,7 @@ locals {
 resource "google_container_cluster" "main" {
   name               = "${var.cluster_name}-${var.branch}"
   location           = var.location
-  initial_node_count = 4
+  initial_node_count = 3
 
   node_config {
     service_account = local.service_account_email # Retrieving the email of the service account from locals
