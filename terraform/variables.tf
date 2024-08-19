@@ -1,5 +1,5 @@
 # This variable will be initialized from cli using --vars flag
-# during the workflow process. It will be retrived from repository secrets.
+# during the workflow process. It will be retrieved from repository secrets.
 variable "project_id" {
   description = "Google Cloud Project ID"
   type        = string
