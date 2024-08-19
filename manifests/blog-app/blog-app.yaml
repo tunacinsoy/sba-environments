@@ -123,7 +123,7 @@ spec:
     spec:
       containers:
         - name: reviews
-          image: tunacinsoy/sba-reviews:v1.0.1-2024.08.13.13.26-14eb5db
+          image: tunacinsoy/sba-reviews:74bcc5c
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
@@ -169,7 +169,7 @@ spec:
     spec:
       containers:
         - name: ratings
-          image: tunacinsoy/sba-ratings:08d7e4d
+          image: tunacinsoy/sba-ratings:a32b00a
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
