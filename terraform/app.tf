@@ -26,7 +26,6 @@ resource "kubectl_manifest" "external-secrets" {
   # It needs to depend on argocd creation, since we'll deploy external-secrets right after argocd gets created
   depends_on = [
     kubectl_manifest.argocd,
-    kubectl_manifest.clusterSecretStore,
   ]
   # for_each iterates over each manifest in the namespace file
   for_each = data.kubectl_file_documents.external-secrets.manifests
