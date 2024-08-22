@@ -35,15 +35,15 @@ resource "kubectl_manifest" "external-secrets" {
 
 # # File that holds the secret resource that have service account credentials
 # # and clusterSecretStore resource that uses credentials to retrieve external secrets
-# data "kubectl_file_documents" "gcpsm-secret" {
-#     content = file("../manifests/argocd/gcpsm-secret.yaml")
-# }
+data "kubectl_file_documents" "gcpsm-secret" {
+    content = file("../manifests/argocd/gcpsm-secret.yaml")
+}
 
-# resource "kubectl_manifest" "gcpsm-secrets" {
-#   depends_on = [
-#     kubectl_manifest.external-secrets,
-#   ]
-#   for_each  = data.kubectl_file_documents.gcpsm-secret.manifests
-#   yaml_body = each.value
-# }
+resource "kubectl_manifest" "gcpsm-secrets" {
+  depends_on = [
+    kubectl_manifest.external-secrets,
+  ]
+  for_each  = data.kubectl_file_documents.gcpsm-secret.manifests
+  yaml_body = each.value
+}
 
