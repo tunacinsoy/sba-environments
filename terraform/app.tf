@@ -35,6 +35,11 @@ resource "kubectl_manifest" "external-secrets" {
   override_namespace = "argocd"
 }
 
+resource "time_sleep" "wait_20_seconds" {
+  depends_on      = [kubectl_manifest.external-secrets]
+  create_duration = "20s"
+}
+
 # # File that holds the secret resource that have service account credentials
 data "kubectl_file_documents" "gcpsm-secret" {
     content = file("../manifests/argocd/gcpsm-secret.yaml")
