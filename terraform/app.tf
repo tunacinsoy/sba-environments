@@ -46,11 +46,6 @@ resource "kubectl_manifest" "gcpsm-secret" {
   yaml_body = each.value
 }
 
-resource "time_sleep" "wait_20_seconds" {
-  depends_on      = [kubectl_manifest.gcpsm-secret]
-  create_duration = "20s"
-}
-
 # clusterSecretStore resource that uses secret resource to retrieve external secrets
 data "kubectl_file_documents" "clusterSecretStore" {
     content = file("../manifests/argocd/clusterSecretStore.yaml")
