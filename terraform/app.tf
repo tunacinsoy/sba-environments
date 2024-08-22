@@ -39,6 +39,7 @@ data "kubectl_file_documents" "gcpsm-secret" {
     content = file("../manifests/argocd/gcpsm-secret.yaml")
 }
 
+
 resource "kubectl_manifest" "gcpsm-secret" {
   depends_on = [
     kubectl_manifest.external-secrets,
