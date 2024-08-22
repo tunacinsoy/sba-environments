@@ -9,6 +9,7 @@ spec:
     name: gcp-backend
   target:
   # Specifies the name of the secret resource that will be created with this externalSecret object
+
     name: mongodb-creds-external
   data:
   - secretKey: MONGO_INITDB_ROOT_USERNAME
