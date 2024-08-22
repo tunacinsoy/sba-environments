@@ -28,7 +28,8 @@ spec:
             - containerPort: 27017
           envFrom:
             - secretRef:
-                name: mongodb-creds
+                # mongodb-creds-external for external-secrets
+                name: mongodb-creds-external
           volumeMounts:
             - name: mongodb-data
               mountPath: /data/db
@@ -85,12 +86,12 @@ spec:
             - name: MONGODB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: mongodb-creds
+                  name: mongodb-creds-external
                   key: MONGO_INITDB_ROOT_USERNAME
             - name: MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mongodb-creds
+                  name: mongodb-creds-external
                   key: MONGO_INITDB_ROOT_PASSWORD
 ---
 apiVersion: v1
@@ -131,12 +132,12 @@ spec:
             - name: MONGODB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: mongodb-creds
+                  name: mongodb-creds-external
                   key: MONGO_INITDB_ROOT_USERNAME
             - name: MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mongodb-creds
+                  name: mongodb-creds-external
                   key: MONGO_INITDB_ROOT_PASSWORD
 ---
 apiVersion: v1
@@ -177,12 +178,12 @@ spec:
             - name: MONGODB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: mongodb-creds
+                  name: mongodb-creds-external
                   key: MONGO_INITDB_ROOT_USERNAME
             - name: MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mongodb-creds
+                  name: mongodb-creds-external
                   key: MONGO_INITDB_ROOT_PASSWORD
 ---
 apiVersion: v1
@@ -223,12 +224,12 @@ spec:
             - name: MONGODB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: mongodb-creds
+                  name: mongodb-creds-external
                   key: MONGO_INITDB_ROOT_USERNAME
             - name: MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mongodb-creds
+                  name: mongodb-creds-external
                   key: MONGO_INITDB_ROOT_PASSWORD
 ---
 apiVersion: v1
