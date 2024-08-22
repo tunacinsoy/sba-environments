@@ -7,8 +7,8 @@ resource "google_service_account" "main" {
   display_name = "GKE Cluster ${var.cluster_name}-${var.branch} Service Account"
 }
 
-After the creation of service account, the email attribute will be exposed automatically.
-With locals definition, it will be more readable for users to see which attributes are created.
+#After the creation of service account, the email attribute will be exposed automatically.
+#With locals definition, it will be more readable for users to see which attributes are created.
 locals {
   service_account_email = google_service_account.main.email
 }
