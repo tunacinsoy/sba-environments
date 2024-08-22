@@ -24,7 +24,10 @@ data "kubectl_file_documents" "external-secrets" {
 
 resource "kubectl_manifest" "external-secrets" {
   # It needs to depend on argocd creation, since we'll deploy external-secrets right after argocd gets created
-  depends_on = [kubectl_manifest.argocd]
+  depends_on = [
+    kubectl_manifest.argocd,
+    kubectl_manifest.clusterSecretStore,
+  ]
   # for_each iterates over each manifest in the namespace file
   for_each = data.kubectl_file_documents.external-secrets.manifests
   # Applies the content of each manifest to the Kubernetes cluster
@@ -44,6 +47,11 @@ resource "kubectl_manifest" "gcpsm-secret" {
   ]
   for_each  = data.kubectl_file_documents.gcpsm-secret.manifests
   yaml_body = each.value
+}
+
+resource "time_sleep" "wait_20_seconds" {
+  depends_on      = [kubectl_manifest.gcpsm-secret]
+  create_duration = "20s"
 }
 
 # clusterSecretStore resource that uses secret resource to retrieve external secrets
