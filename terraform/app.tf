@@ -48,7 +48,7 @@ resource "kubectl_manifest" "gcpsm-secret" {
 }
 
 # SecretStore resource that uses secret resource to retrieve external secrets
-data "kubectl_file_documents" "SecretStore" {
+data "kubectl_file_documents" "secret-store" {
     content = file("../manifests/argocd/secret-store.yaml")
 }
 
