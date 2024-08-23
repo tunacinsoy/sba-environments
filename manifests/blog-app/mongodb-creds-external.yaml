@@ -2,10 +2,10 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: mongodb-creds-external
-  #namespace: blog-app
+  namespace: blog-app
 spec:
   secretStoreRef:
-    kind: SecretStore
+    kind: ClusterSecretStore
     name: gcp-backend
     #namespace: blog-app
   target:
