@@ -7,7 +7,9 @@ data "kubectl_file_documents" "apps" {
 
 resource "kubectl_manifest" "apps" {
   # Needs to depend on argocd deployment, since we'll configure it after deployment finishes
-  depends_on = [kubectl_manifest.argocd]
+  depends_on = [kubectl_manifest.argocd,
+    kubectl_manifest.gcpsm-secret # GCP access credentials (service account) should  be deployed first, so that blog-app will be able to retrieve secrets
+  ]
   # for_each iterates over each manifest in the namespace file
   for_each           = data.kubectl_file_documents.apps.manifests
   # Applies the content of each manifest to the Kubernetes cluster
@@ -45,16 +47,16 @@ resource "kubectl_manifest" "gcpsm-secret" {
   yaml_body = each.value
 }
 
-# clusterSecretStore resource that uses secret resource to retrieve external secrets
-data "kubectl_file_documents" "clusterSecretStore" {
-    content = file("../manifests/argocd/clusterSecretStore.yaml")
+# SecretStore resource that uses secret resource to retrieve external secrets
+data "kubectl_file_documents" "SecretStore" {
+    content = file("../manifests/argocd/secret-store.yaml")
 }
 
-resource "kubectl_manifest" "clusterSecretStore" {
+resource "kubectl_manifest" "secret-store" {
   depends_on = [
     kubectl_manifest.gcpsm-secret,
   ]
-  for_each  = data.kubectl_file_documents.clusterSecretStore.manifests
+  for_each  = data.kubectl_file_documents.secret-store.manifests
   yaml_body = each.value
 }
 
