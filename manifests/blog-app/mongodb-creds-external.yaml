@@ -2,12 +2,12 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: mongodb-creds-external
-  namespace: blog-app
+  #namespace: blog-app
 spec:
   secretStoreRef:
     kind: SecretStore
     name: gcp-backend
-    namespace: blog-app
+    #namespace: blog-app
   target:
   # Specifies the name of the secret resource that will be created with this externalSecret object
     name: mongodb-creds-external
