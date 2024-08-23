@@ -7,9 +7,7 @@ data "kubectl_file_documents" "apps" {
 
 resource "kubectl_manifest" "apps" {
   # Needs to depend on argocd deployment, since we'll configure it after deployment finishes
-  depends_on = [kubectl_manifest.argocd,
-    #kubectl_manifest.gcpsm-secret # GCP access credentials (service account) should  be deployed first, so that blog-app will be able to retrieve secrets
-  ]
+  depends_on = [kubectl_manifest.argocd]
   # for_each iterates over each manifest in the namespace file
   for_each           = data.kubectl_file_documents.apps.manifests
   # Applies the content of each manifest to the Kubernetes cluster
