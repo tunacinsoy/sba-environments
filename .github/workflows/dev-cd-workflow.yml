@@ -7,10 +7,10 @@ jobs:
     name: Create Environment and Deploy the Application
     uses: ./.github/workflows/create-cluster.yml
     secrets: inherit
-  # run-tests:
-  #   name: Run Integration Tests
-  #   uses: ./.github/workflows/run-tests.yml
-  #   secrets: inherit
+  run-tests:
+    name: Run Integration Tests
+    uses: ./.github/workflows/run-tests.yml
+    secrets: inherit
   # binary-auth:
   #   name: Attest Images
   #   uses: ./.github/workflows/attest-images.yml
