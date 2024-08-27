@@ -45,16 +45,16 @@ resource "kubectl_manifest" "gcpsm-secret" {
   yaml_body = each.value
 }
 
-# SecretStore resource that uses secret resource to retrieve external secrets
-data "kubectl_file_documents" "secret-store" {
-    content = file("../manifests/argocd/secret-store.yaml")
+# ClusterSecretStore resource uses k8s-secret resource to retrieve application secrets from google cloud secret manager
+data "kubectl_file_documents" "cluster-secret-store" {
+    content = file("../manifests/argocd/cluster-secret-store.yaml")
 }
 
-resource "kubectl_manifest" "secret-store" {
+resource "kubectl_manifest" "cluster-secret-store" {
   depends_on = [
     kubectl_manifest.gcpsm-secret,
   ]
-  for_each  = data.kubectl_file_documents.secret-store.manifests
+  for_each  = data.kubectl_file_documents.cluster-secret-store.manifests
   yaml_body = each.value
 }
 
