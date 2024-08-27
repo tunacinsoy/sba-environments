@@ -6,6 +6,13 @@ resource "google_kms_key_ring" "qa-attestor-keyring" {
     prevent_destroy = false
   }
 }
+
+resource "google_kms_key_ring_iam_member" "key_ring" {
+  key_ring_id = google_kms_key_ring.qa-attestor-keyring.id
+  role        = "roles/cloudkms.admin"
+  member      = "serviceAccount:terraform@$PROJECT_ID.iam.gserviceaccount.com"
+}
+
 # trigger
 module "qa-attestor" {
   count = var.branch == "dev" ? 1 : 0
