@@ -7,7 +7,6 @@ resource "google_kms_key_ring" "qa-attestor-keyring" {
   }
 }
 
-# trigger
 module "qa-attestor" {
   count = var.branch == "dev" ? 1 : 0
   source = "terraform-google-modules/kubernetes-engine/google//modules/binary-authorization"
