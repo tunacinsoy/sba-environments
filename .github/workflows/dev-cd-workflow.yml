@@ -15,7 +15,7 @@ jobs:
     name: Attest Images
     uses: ./.github/workflows/attest-images.yml
     secrets: inherit
-  # raise-pull-request:
-  #   name: Raise PR to prod branch
-  #   uses: ./.github/workflows/raise-pr.yml
-  #   secrets: inherit
+  raise-pull-request:
+    name: Raise PR to prod branch
+    uses: ./.github/workflows/raise-pr.yml
+    secrets: inherit
