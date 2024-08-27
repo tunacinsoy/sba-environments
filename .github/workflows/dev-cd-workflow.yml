@@ -11,10 +11,10 @@ jobs:
     name: Run Integration Tests
     uses: ./.github/workflows/run-tests.yml
     secrets: inherit
-  # binary-auth:
-  #   name: Attest Images
-  #   uses: ./.github/workflows/attest-images.yml
-  #   secrets: inherit
+  binary-auth:
+    name: Attest Images
+    uses: ./.github/workflows/attest-images.yml
+    secrets: inherit
   # raise-pull-request:
   #   name: Raise PR to prod branch
   #   uses: ./.github/workflows/raise-pr.yml

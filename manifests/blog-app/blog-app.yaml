@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: mongodb
-          image: mongo:7.0
+          image: docker.io/library/mongo@sha256:e64f27edef80b41715e5830312da25ea5e6874a2b62ed1adb3e8f74bde7475a6
           imagePullPolicy: Always
           ports:
             - containerPort: 27017
@@ -78,7 +78,7 @@ spec:
     spec:
       containers:
         - name: posts
-          image: tunacinsoy/sba-posts:83047ac
+          image: docker.io/tunacinsoy/sba-posts@sha256:54245463f0b41501c871c0cba14029583d6c5fd0bc8e202fa5201db6ab52d46d
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
@@ -124,7 +124,7 @@ spec:
     spec:
       containers:
         - name: reviews
-          image: tunacinsoy/sba-reviews:74bcc5c
+          image: docker.io/tunacinsoy/sba-reviews@sha256:66d7f398d5b2f5a28e68776adb26fe6931eb9099ab8195e2cb36e9e0ae8620b5
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
@@ -170,7 +170,7 @@ spec:
     spec:
       containers:
         - name: ratings
-          image: tunacinsoy/sba-ratings:a32b00a
+          image: docker.io/tunacinsoy/sba-ratings@sha256:c20883b45f92194a14ab093ca1c10d019b93a8458cead1a0645a2b762885627e
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
@@ -216,7 +216,7 @@ spec:
     spec:
       containers:
         - name: users
-          image: tunacinsoy/sba-users:ddf2a8e
+          image: docker.io/tunacinsoy/sba-users@sha256:106c04abd8bfe3ff1f5c57031b67f4beee8d159ae4d51a0ccca1470f383e064a
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
@@ -262,7 +262,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: tunacinsoy/sba-frontend:2aea612
+          image: docker.io/tunacinsoy/sba-frontend@sha256:466ef8f59a7ef5081334c0e4082a2c16f01e251eaa08c94d803aeb0ed9684fd6
           imagePullPolicy: Always
           ports:
             - containerPort: 5000

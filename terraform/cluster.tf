@@ -18,6 +18,14 @@ resource "google_container_cluster" "main" {
   location           = var.location
   initial_node_count = 3
 
+  # Only for prod env it will be deployed, since prod won't accept not attested images
+  dynamic "binary_authorization" {
+    for_each = var.branch == "prod" ? [1] : []
+    content {
+      evaluation_mode = "PROJECT_SINGLETON_POLICY_ENFORCE"
+    }
+  }
+
   node_config {
     service_account = local.service_account_email # Retrieving the email of the service account from locals
     disk_size_gb    = 10                          # Setting disk size to 10 GB because of the free account quota limits
