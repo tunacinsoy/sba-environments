@@ -9,21 +9,21 @@ resource "kubectl_manifest" "apps" {
   # Needs to depend on argocd deployment, since we'll configure it after deployment finishes
   depends_on = [kubectl_manifest.argocd]
   # for_each iterates over each manifest in the namespace file
-  for_each           = data.kubectl_file_documents.apps.manifests
+  for_each = data.kubectl_file_documents.apps.manifests
   # Applies the content of each manifest to the Kubernetes cluster
-  yaml_body          = each.value
+  yaml_body = each.value
   # Forces the namespace to be set to argocd, ensuring that all resources are created in the correct namespace
   override_namespace = "argocd"
 }
 
-# MANAGING SECRETS USING External Secrets
+# Managing Secrets using ExternalSecrets Operator
 # External-Secrets operator for the retrieval of secrets
 data "kubectl_file_documents" "external-secrets" {
   content = file("../manifests/argocd/external-secrets.yaml")
 }
 
 resource "kubectl_manifest" "external-secrets" {
-  # It needs to depend on argocd creation, since we'll deploy external-secrets right after argocd gets created
+  #It needs to depend on the creation of ArgoCD, since we'll deploy external-secrets right after ArgoCD is created.
   depends_on = [
     kubectl_manifest.argocd,
   ]
@@ -35,9 +35,10 @@ resource "kubectl_manifest" "external-secrets" {
   override_namespace = "argocd"
 }
 
-# # File that holds the secret resource that have service account credentials
+# File that holds the secret resource that have service account credentials.
+# It is used by ClusterSecretStore object to access GCP Secret Manager to retrieve application secrets.
 data "kubectl_file_documents" "gcpsm-secret" {
-    content = file("../manifests/argocd/gcpsm-secret.yaml")
+  content = file("../manifests/argocd/gcpsm-secret.yaml")
 }
 
 resource "kubectl_manifest" "gcpsm-secret" {
@@ -47,7 +48,7 @@ resource "kubectl_manifest" "gcpsm-secret" {
 
 # ClusterSecretStore resource uses k8s-secret resource to retrieve application secrets from google cloud secret manager
 data "kubectl_file_documents" "cluster-secret-store" {
-    content = file("../manifests/argocd/cluster-secret-store.yaml")
+  content = file("../manifests/argocd/cluster-secret-store.yaml")
 }
 
 resource "kubectl_manifest" "cluster-secret-store" {

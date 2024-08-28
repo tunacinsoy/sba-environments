@@ -13,7 +13,7 @@ provider "kubectl" {
   token                  = module.gke_auth.token
   # Ensures Terraform uses the connection details provided directly in the
   # Terraform configuration (e.g., host, cluster_ca_certificate, token), rather than relying on the local Kubernetes config file (~/.kube/config).
-  load_config_file       = false
+  load_config_file = false
 }
 
 terraform {
