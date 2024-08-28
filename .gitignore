@@ -19,10 +19,26 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Ignore sensitive environment variables file
+# Ignore sensitive variables file
 .env
+*.tfvars
+*.json
 
 # Ignore any temporary files
 *.log
 *.out
 *.tmp
+
+# If we want to use sealed-secrets, these lines should be here
+# However, if they are already being tracked, firstly they should be untracked using:
+# git rm --cached <file>
+# manifests/blog-app/mongodb-creds-external.yaml
+# manifests/argocd/external-secrets.yaml
+# manifests/argocd/gcpsm-secret.yaml
+
+# If we want to use external-secrets, these lines should be here.
+# However, if they are already being tracked, firstly they should be untracked using:
+# git rm --cached <file>
+# manifests/sealed-secrets/*
+# manifests/sealed-secrets/controller.yaml
+# manifests/blog-app/mongodb-creds-sealed.yaml

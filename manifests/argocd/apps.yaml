@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: argo-apps
+  # ApplicationSet resource will be deployed to argocd namespace,
+  # not the applications which will argocd manage.
+  # Each application will define which namespace they will be located in
+  # within their respective manifest files.
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/tunacinsoy/sba-environments.git
+      # revision: HEAD will be converted into branch name during workflow process.
+      # It means that the generator will use the latest commit on the default branch of the specified repository
+      revision: HEAD
+      directories:
+      - path: manifests/*
+      # We do not want argocd to manage itself
+      - path: manifests/argocd
+        exclude: true
+  template:
+    metadata:
+    # Application name will be the folder name, for instance 'sealed-secrets'
+      name: '{{path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/tunacinsoy/sba-environments.git
+        # targetRevision: HEAD will be updated with the branch name during workflow process.
+        # It specifies which Git reference Argo CD should deploy for each application.
+        targetRevision: HEAD
+        path: '{{path}}'
+      destination:
+        server: https://kubernetes.default.svc
+      syncPolicy:
+        automated:
+          selfHeal: true

@@ -1,0 +1,282 @@
+# Test
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: blog-app
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: blog-app
+spec:
+  serviceName: mongodb
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: docker.io/library/mongo@sha256:e64f27edef80b41715e5830312da25ea5e6874a2b62ed1adb3e8f74bde7475a6
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 27017
+          envFrom:
+            - secretRef:
+                # mongodb-creds-external for external-secrets
+                name: mongodb-creds-external
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /data/db
+      volumes:
+        - name: mongodb-data
+          persistentVolumeClaim:
+            claimName: mongodb-data
+  volumeClaimTemplates:
+    - metadata:
+        name: mongodb-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: blog-app
+spec:
+  clusterIP: None
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts
+  namespace: blog-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: posts
+  template:
+    metadata:
+      labels:
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          image: docker.io/tunacinsoy/sba-posts@sha256:54245463f0b41501c871c0cba14029583d6c5fd0bc8e202fa5201db6ab52d46d
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-creds-external
+                  key: MONGO_INITDB_ROOT_USERNAME
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-creds-external
+                  key: MONGO_INITDB_ROOT_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts
+  namespace: blog-app
+spec:
+  selector:
+    app: posts
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reviews
+  namespace: blog-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reviews
+  template:
+    metadata:
+      labels:
+        app: reviews
+    spec:
+      containers:
+        - name: reviews
+          image: docker.io/tunacinsoy/sba-reviews@sha256:66d7f398d5b2f5a28e68776adb26fe6931eb9099ab8195e2cb36e9e0ae8620b5
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-creds-external
+                  key: MONGO_INITDB_ROOT_USERNAME
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-creds-external
+                  key: MONGO_INITDB_ROOT_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: reviews
+  namespace: blog-app
+spec:
+  selector:
+    app: reviews
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ratings
+  namespace: blog-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ratings
+  template:
+    metadata:
+      labels:
+        app: ratings
+    spec:
+      containers:
+        - name: ratings
+          image: docker.io/tunacinsoy/sba-ratings@sha256:c20883b45f92194a14ab093ca1c10d019b93a8458cead1a0645a2b762885627e
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-creds-external
+                  key: MONGO_INITDB_ROOT_USERNAME
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-creds-external
+                  key: MONGO_INITDB_ROOT_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ratings
+  namespace: blog-app
+spec:
+  selector:
+    app: ratings
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users
+  namespace: blog-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users
+  template:
+    metadata:
+      labels:
+        app: users
+    spec:
+      containers:
+        - name: users
+          image: docker.io/tunacinsoy/sba-users@sha256:106c04abd8bfe3ff1f5c57031b67f4beee8d159ae4d51a0ccca1470f383e064a
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-creds-external
+                  key: MONGO_INITDB_ROOT_USERNAME
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-creds-external
+                  key: MONGO_INITDB_ROOT_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users
+  namespace: blog-app
+spec:
+  selector:
+    app: users
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: blog-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: docker.io/tunacinsoy/sba-frontend@sha256:466ef8f59a7ef5081334c0e4082a2c16f01e251eaa08c94d803aeb0ed9684fd6
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: blog-app
+spec:
+  selector:
+    app: frontend
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
