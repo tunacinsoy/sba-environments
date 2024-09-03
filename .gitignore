@@ -42,3 +42,5 @@ terraform.rc
 # manifests/sealed-secrets/*
 # manifests/sealed-secrets/controller.yaml
 # manifests/blog-app/mongodb-creds-sealed.yaml
+
+manifests/blog-app/blog-app.yaml
