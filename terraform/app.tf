@@ -16,28 +16,26 @@ resource "kubectl_manifest" "apps" {
   override_namespace = "argocd"
 }
 
-# Managing Secrets using ExternalSecrets Operator
-# External-Secrets operator for the retrieval of secrets
-data "kubectl_file_documents" "external-secrets" {
-  content = file("../manifests/argocd/external-secrets.yaml")
-}
-
-resource "kubectl_manifest" "external-secrets" {
-  #It needs to depend on the creation of ArgoCD, since we'll deploy external-secrets right after ArgoCD is created.
-  depends_on = [
-    kubectl_manifest.argocd,
-  ]
-  # for_each iterates over each manifest in the namespace file
-  for_each = data.kubectl_file_documents.external-secrets.manifests
-  # Applies the content of each manifest to the Kubernetes cluster
-  yaml_body = each.value
-  # Forces the namespace to be set to argocd, ensuring that all resources are created in the correct namespace
-  override_namespace = "argocd"
-}
-
-
-
 # I am done with externalSecrets, a lot of problems
+# Managing Secrets using ExternalSecrets Operator
+# # External-Secrets operator for the retrieval of secrets
+# data "kubectl_file_documents" "external-secrets" {
+#   content = file("../manifests/argocd/external-secrets.yaml")
+# }
+
+# resource "kubectl_manifest" "external-secrets" {
+#   #It needs to depend on the creation of ArgoCD, since we'll deploy external-secrets right after ArgoCD is created.
+#   depends_on = [
+#     kubectl_manifest.argocd,
+#   ]
+#   # for_each iterates over each manifest in the namespace file
+#   for_each = data.kubectl_file_documents.external-secrets.manifests
+#   # Applies the content of each manifest to the Kubernetes cluster
+#   yaml_body = each.value
+#   # Forces the namespace to be set to argocd, ensuring that all resources are created in the correct namespace
+#   override_namespace = "argocd"
+# }
+
 # # File that holds the secret resource that have service account credentials.
 # # It is used by ClusterSecretStore object to access GCP Secret Manager to retrieve application secrets.
 # data "kubectl_file_documents" "gcpsm-secret" {
