@@ -16,7 +16,7 @@ locals {
 resource "google_container_cluster" "main" {
   name               = "${var.cluster_name}-${var.branch}"
   location           = var.location
-  initial_node_count = 3
+  initial_node_count = 1
 
   # Only for prod env it will be deployed, since prod won't accept not-attested images
   dynamic "binary_authorization" {
@@ -27,6 +27,8 @@ resource "google_container_cluster" "main" {
   }
 
   node_config {
+
+    machine_type    = "e2-standard-16"
     service_account = local.service_account_email # Retrieving the email of the service account from locals
     disk_size_gb    = 10                          # Setting disk size to 10 GB because of the free account quota limits
     oauth_scopes = [
@@ -37,6 +39,7 @@ resource "google_container_cluster" "main" {
 
     ]
   }
+
   # Defines how long Terraform should wait for the create and update operations to complete.
   timeouts {
     create = "30m" # Allows up to 30 minutes for the cluster creation process
