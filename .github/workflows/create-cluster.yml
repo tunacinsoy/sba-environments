@@ -8,6 +8,7 @@ jobs:
         working-directory: ./terraform
     steps:
     - uses: actions/checkout@v2
+    # Reformats argocd apps yaml file with the current branch
     - name: Reformat argocd applicationset config
       id: reformat-argocd-applicationset
       run: sed -i "s/HEAD/${GITHUB_REF##*/}/g" ../manifests/argocd/apps.yaml
