@@ -35,27 +35,30 @@ resource "kubectl_manifest" "external-secrets" {
   override_namespace = "argocd"
 }
 
-# File that holds the secret resource that have service account credentials.
-# It is used by ClusterSecretStore object to access GCP Secret Manager to retrieve application secrets.
-data "kubectl_file_documents" "gcpsm-secret" {
-  content = file("../manifests/argocd/gcpsm-secret.yaml")
-}
 
-resource "kubectl_manifest" "gcpsm-secret" {
-  for_each  = data.kubectl_file_documents.gcpsm-secret.manifests
-  yaml_body = each.value
-}
 
-# ClusterSecretStore resource uses k8s-secret resource to retrieve application secrets from google cloud secret manager
-data "kubectl_file_documents" "cluster-secret-store" {
-  content = file("../manifests/argocd/cluster-secret-store.yaml")
-}
+# I am done with externalSecrets, a lot of problems
+# # File that holds the secret resource that have service account credentials.
+# # It is used by ClusterSecretStore object to access GCP Secret Manager to retrieve application secrets.
+# data "kubectl_file_documents" "gcpsm-secret" {
+#   content = file("../manifests/argocd/gcpsm-secret.yaml")
+# }
 
-resource "kubectl_manifest" "cluster-secret-store" {
-  depends_on = [
-    kubectl_manifest.gcpsm-secret,
-  ]
-  for_each  = data.kubectl_file_documents.cluster-secret-store.manifests
-  yaml_body = each.value
-}
+# resource "kubectl_manifest" "gcpsm-secret" {
+#   for_each  = data.kubectl_file_documents.gcpsm-secret.manifests
+#   yaml_body = each.value
+# }
+
+# # ClusterSecretStore resource uses k8s-secret resource to retrieve application secrets from google cloud secret manager
+# data "kubectl_file_documents" "cluster-secret-store" {
+#   content = file("../manifests/argocd/cluster-secret-store.yaml")
+# }
+
+# resource "kubectl_manifest" "cluster-secret-store" {
+#   depends_on = [
+#     kubectl_manifest.gcpsm-secret,
+#   ]
+#   for_each  = data.kubectl_file_documents.cluster-secret-store.manifests
+#   yaml_body = each.value
+# }
 
