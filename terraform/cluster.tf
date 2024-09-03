@@ -12,7 +12,7 @@ resource "google_service_account" "main" {
 locals {
   service_account_email = google_service_account.main.email
 }
-
+# trigger
 resource "google_container_cluster" "main" {
   name               = "${var.cluster_name}-${var.branch}"
   location           = var.location
