@@ -7,18 +7,18 @@ jobs:
     name: Create Environment and Deploy the Application
     uses: ./.github/workflows/create-cluster.yml
     secrets: inherit
-  # run-tests:
-  #   name: Run Integration Tests
-  #   needs: [create-environment-and-deploy-app]
-  #   uses: ./.github/workflows/run-tests.yml
-  #   secrets: inherit
-  # binary-auth:
-  #   name: Attest Images
-  #   needs: [run-tests]
-  #   uses: ./.github/workflows/attest-images.yml
-  #   secrets: inherit
-  # raise-pull-request:
-  #   name: Raise PR to prod branch
-  #   needs: [binary-auth]
-  #   uses: ./.github/workflows/raise-pr.yml
-  #   secrets: inherit
+  run-tests:
+    name: Run Integration Tests
+    needs: [create-environment-and-deploy-app]
+    uses: ./.github/workflows/run-tests.yml
+    secrets: inherit
+  binary-auth:
+    name: Attest Images
+    needs: [run-tests]
+    uses: ./.github/workflows/attest-images.yml
+    secrets: inherit
+  raise-pull-request:
+    name: Raise PR to prod branch
+    needs: [binary-auth]
+    uses: ./.github/workflows/raise-pr.yml
+    secrets: inherit
