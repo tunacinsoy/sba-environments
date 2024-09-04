@@ -7,15 +7,18 @@ jobs:
       run:
         working-directory: .
     steps:
+    # checkout@v4 is the latest version
     - uses: actions/checkout@v4
     - id: gcloud-auth
       name: Authenticate with gcloud
-      uses: 'google-github-actions/auth@v1'
+    # auth@v2 is the latest version
+      uses: 'google-github-actions/auth@v2'
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
     - name: Set up Cloud SDK
       id: setup-gcloud-sdk
-      uses: 'google-github-actions/setup-gcloud@v1'
+    # setup-gcloud@v2 is the latest version
+      uses: 'google-github-actions/setup-gcloud@v2'
     - name: Install gcloud beta
       id: install-gcloud-beta
       run: gcloud components install beta

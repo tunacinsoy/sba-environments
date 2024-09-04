@@ -7,6 +7,7 @@ jobs:
       run:
         working-directory: .
     steps:
+    # checkout@v4 is the latest version
       - uses: actions/checkout@v4
       - name: Raise a Pull Request
         id: pull-request

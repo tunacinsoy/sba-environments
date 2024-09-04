@@ -7,6 +7,7 @@ jobs:
       run:
         working-directory: ./terraform
     steps:
+    # checkout@v4 is the latest version
     - uses: actions/checkout@v4
     # Reformats argocd apps yaml file with the current branch
     - name: Reformat argocd applicationset config

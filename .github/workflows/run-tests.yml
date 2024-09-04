@@ -7,13 +7,15 @@ jobs:
       run:
         working-directory: ./tests
     steps:
+    # checkout@v4 is the latest version
     - uses: actions/checkout@v4
     - name: Extract branch name
       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       id: extract_branch
     - id: gcloud-auth
       name: Authenticate with gcloud
-      uses: 'google-github-actions/auth@v1'
+      # v2 is the latest version
+      uses: 'google-github-actions/auth@v2'
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
     - name: Set up Cloud SDK
