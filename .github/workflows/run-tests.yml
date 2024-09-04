@@ -7,7 +7,7 @@ jobs:
       run:
         working-directory: ./tests
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Extract branch name
       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       id: extract_branch
