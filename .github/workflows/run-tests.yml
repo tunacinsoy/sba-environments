@@ -14,16 +14,18 @@ jobs:
       id: extract_branch
     - id: gcloud-auth
       name: Authenticate with gcloud
-      # v2 is the latest version
+      # auth@v2 is the latest version
       uses: 'google-github-actions/auth@v2'
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
     - name: Set up Cloud SDK
       id: setup-gcloud-sdk
-      uses: 'google-github-actions/setup-gcloud@v1'
+      # setup-gcloud@v2 is the latest version
+      uses: 'google-github-actions/setup-gcloud@v2'
     - name: Get kubectl credentials
       id: 'get-credentials'
-      uses: 'google-github-actions/get-gke-credentials@v1'
+      # get-gke-credentials@v2 is the latest version
+      uses: 'google-github-actions/get-gke-credentials@v2'
       with:
         cluster_name: sba-cluster-${{ steps.extract_branch.outputs.branch }}
         location: ${{ secrets.CLUSTER_LOCATION }}
