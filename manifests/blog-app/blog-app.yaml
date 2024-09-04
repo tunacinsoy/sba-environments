@@ -98,6 +98,10 @@ spec:
                 secretKeyRef:
                   name: mongodb-creds
                   key: MONGO_INITDB_ROOT_PASSWORD
+      tolerations:
+        - key: "node.kubernetes.io/disk-pressure"
+          operator: "Exists"
+          effect: "NoSchedule"
 ---
 apiVersion: v1
 kind: Service
@@ -144,6 +148,10 @@ spec:
                 secretKeyRef:
                   name: mongodb-creds
                   key: MONGO_INITDB_ROOT_PASSWORD
+      tolerations:
+        - key: "node.kubernetes.io/disk-pressure"
+          operator: "Exists"
+          effect: "NoSchedule"
 ---
 apiVersion: v1
 kind: Service
@@ -190,6 +198,10 @@ spec:
                 secretKeyRef:
                   name: mongodb-creds
                   key: MONGO_INITDB_ROOT_PASSWORD
+      tolerations:
+        - key: "node.kubernetes.io/disk-pressure"
+          operator: "Exists"
+          effect: "NoSchedule"
 ---
 apiVersion: v1
 kind: Service
@@ -236,6 +248,10 @@ spec:
                 secretKeyRef:
                   name: mongodb-creds
                   key: MONGO_INITDB_ROOT_PASSWORD
+      tolerations:
+        - key: "node.kubernetes.io/disk-pressure"
+          operator: "Exists"
+          effect: "NoSchedule"
 ---
 apiVersion: v1
 kind: Service
@@ -271,6 +287,10 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
+      tolerations:
+        - key: "node.kubernetes.io/disk-pressure"
+          operator: "Exists"
+          effect: "NoSchedule"
 ---
 apiVersion: v1
 kind: Service
