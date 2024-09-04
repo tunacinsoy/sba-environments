@@ -7,7 +7,7 @@ jobs:
       run:
         working-directory: .
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Raise a Pull Request
         id: pull-request
         uses: repo-sync/pull-request@v2

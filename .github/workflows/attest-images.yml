@@ -7,7 +7,7 @@ jobs:
       run:
         working-directory: .
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - id: gcloud-auth
       name: Authenticate with gcloud
       uses: 'google-github-actions/auth@v1'
