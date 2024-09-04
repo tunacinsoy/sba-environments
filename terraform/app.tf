@@ -16,6 +16,19 @@ resource "kubectl_manifest" "apps" {
   override_namespace = "argocd"
 }
 
+data "kubectl_file_documents" "istio" {
+    content = file("../manifests/argocd/istio.yaml")
+}
+
+resource "kubectl_manifest" "istio" {
+  depends_on = [
+    kubectl_manifest.argocd,
+  ]
+  for_each  = data.kubectl_file_documents.istio.manifests
+  yaml_body = each.value
+  override_namespace = "argocd"
+}
+
 # I am done with externalSecrets, a lot of problems
 # Managing Secrets using ExternalSecrets Operator
 # # External-Secrets operator for the retrieval of secrets
