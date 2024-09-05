@@ -269,7 +269,8 @@ metadata:
 spec:
   selector:
     app: frontend
-  type: LoadBalancer
+  # We'll use istio-ingress, that's wh4y front-end's service should become clusterIP type
+  type: ClusterIP
   ports:
     - protocol: TCP
       port: 80
