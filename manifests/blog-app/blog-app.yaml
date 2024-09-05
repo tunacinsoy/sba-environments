@@ -256,7 +256,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: docker.io/tunacinsoy/sba-frontend@sha256:466ef8f59a7ef5081334c0e4082a2c16f01e251eaa08c94d803aeb0ed9684fd6
+          image: docker.io/tunacinsoy/sba-frontend:dc34a11
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
