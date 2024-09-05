@@ -5,7 +5,7 @@ metadata:
   namespace: istio-system
 spec:
   secretName: blog-app-domain-cert-prod
-  duration: 2160h # 90d
+  duration: 2160h #90d
   renewBefore: 360h # 15d
   isCA: false
   privateKey:
