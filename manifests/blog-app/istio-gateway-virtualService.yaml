@@ -17,17 +17,17 @@ spec:
     # hosts: ["myblog.com"]: Accepts traffic only for myblog.com
     hosts:
     - "*"
-    tls:
-      httpsRedirect: false # Handle redirect in the VirtualService
-  - port:
-      number: 443
-      name: https
-      protocol: HTTPS
-    tls:
-      mode: SIMPLE
-      credentialName: blog-app-domain-cert-prod
-    hosts:
-    - "blogapp.magdalani.com"
+  #   tls:
+  #     httpsRedirect: false # Handle redirect in the VirtualService
+  # - port:
+  #     number: 443
+  #     name: https
+  #     protocol: HTTPS
+  #   tls:
+  #     mode: SIMPLE
+  #     credentialName: blog-app-domain-cert-prod
+  #   hosts:
+  #   - "blogapp.magdalani.com"
 ---
 apiVersion: networking.istio.io/v1
 kind: VirtualService
