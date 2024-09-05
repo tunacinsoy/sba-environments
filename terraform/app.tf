@@ -16,6 +16,7 @@ resource "kubectl_manifest" "apps" {
   override_namespace = "argocd"
 }
 
+# istio.yaml file contains charts for 'istio-base', 'istiod' and 'istio-ingress'
 data "kubectl_file_documents" "istio" {
     content = file("../manifests/argocd/istio.yaml")
 }
@@ -25,6 +26,20 @@ resource "kubectl_manifest" "istio" {
     kubectl_manifest.argocd,
   ]
   for_each  = data.kubectl_file_documents.istio.manifests
+  yaml_body = each.value
+  override_namespace = "argocd"
+}
+
+# Cert-manager chart for the digital certificate creation
+data "kubectl_file_documents" "cert-manager" {
+    content = file("../manifests/argocd/cert-manager.yaml")
+}
+
+resource "kubectl_manifest" "cert-manager" {
+  depends_on = [
+    kubectl_manifest.argocd,
+  ]
+  for_each  = data.kubectl_file_documents.cert-manager.manifests
   yaml_body = each.value
   override_namespace = "argocd"
 }

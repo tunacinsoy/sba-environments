@@ -1,3 +1,4 @@
+# Gateway is a CustomResourceDefinition that helps to define how the external-traffic should be handled
 apiVersion: networking.istio.io/v1
 kind: Gateway
 metadata:
@@ -5,12 +6,15 @@ metadata:
   namespace: blog-app
 spec:
   selector:
+    # istio-ingress service (which was deployed to namespace istio-ingress) has the following label
     istio: ingress
   servers:
   - port:
       number: 80
       name: http
       protocol: HTTP
+    # Accepts traffic from any hostname. It’s like saying, “I don’t care who’s knocking, let everyone in.”
+    # hosts: ["myblog.com"]: Accepts traffic only for myblog.com
     hosts:
     - "*"
 ---
@@ -23,6 +27,7 @@ spec:
   hosts:
   - "*"
   gateways:
+  # This resource applies to this gateway.
   - blog-app-gateway
   http:
   - match:
@@ -42,6 +47,8 @@ spec:
         exact: /updateprofile
     route:
     - destination:
+        # Since this resource is already deployed to same namespace that frontend service in, it can access that service just by its name.
+        # However, if they were in different namespaces, we should've written something like: frontend.blog-app.svc.cluster.local
         host: frontend
         port:
           number: 80
