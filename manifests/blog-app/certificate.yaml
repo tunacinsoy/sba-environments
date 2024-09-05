@@ -16,7 +16,7 @@ spec:
     - server auth
     - client auth
   dnsNames:
-    - "blog-app.magdalani.com"
+    - "blogapp.magdalani.com"
   issuerRef:
     name: letsencrypt-prod-cluster
     kind: ClusterIssuer
