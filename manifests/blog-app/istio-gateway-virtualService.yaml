@@ -14,11 +14,9 @@ spec:
       name: http
       protocol: HTTP
     # Accepts traffic from any hostname. It’s like saying, “I don’t care who’s knocking, let everyone in.”
-    # hosts: ["myblog.com"]: Accepts traffic only for myblog.com
-    tls:
-      httpsRedirect: false # Handle redirect in the VirtualService
+    # hosts: ["myblog.com"]: Accepts traffic only for myblog.coms
     hosts:
-    - "*"
+    - "blogapp.magdalani.com"
   - port:
       number: 443
       name: https
