@@ -28,7 +28,7 @@ spec:
     - "blogapp.magdalani.com"
 
 ---
-apiVersion: networking.istio.io/v1
+apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: blog-app
@@ -37,9 +37,23 @@ spec:
   hosts:
   - "*"
   gateways:
-  # This resource applies to this gateway.
   - blog-app-gateway
   http:
+  - match:
+    - uri:
+        prefix: /
+    - uri:
+        prefix: /static
+    - uri:
+        prefix: /posts
+    - uri:
+        exact: /login
+    - uri:
+        exact: /logout
+    - uri:
+        exact: /register
+    - uri:
+        exact: /updateprofile
     route:
     - destination:
         # Since this resource is already deployed to same namespace that frontend service in, it can access that service just by its name.
@@ -48,18 +62,5 @@ spec:
         port:
           number: 80
 
-# - match:
-#     - uri:
-#         exact: /
-#     - uri:
-#         prefix: /static
-#     - uri:
-#         prefix: /posts
-#     - uri:
-#         exact: /login
-#     - uri:
-#         exact: /logout
-#     - uri:
-#         exact: /register
-#     - uri:
-#         exact: /updateprofile
+
+
