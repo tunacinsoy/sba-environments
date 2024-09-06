@@ -3,7 +3,7 @@ apiVersion: networking.istio.io/v1
 kind: Gateway
 metadata:
   name: blog-app-gateway
-  namespace: blog-app
+  namespace: istio-system
 spec:
   selector:
     # istio-ingress service (which was deployed to namespace istio-ingress) has the following label
@@ -16,18 +16,16 @@ spec:
     # Accepts traffic from any hostname. It’s like saying, “I don’t care who’s knocking, let everyone in.”
     # hosts: ["myblog.com"]: Accepts traffic only for myblog.com
     hosts:
-    - "*"
-  #   tls:
-  #     httpsRedirect: false # Handle redirect in the VirtualService
-  # - port:
-  #     number: 443
-  #     name: https
-  #     protocol: HTTPS
-  #   tls:
-  #     mode: SIMPLE
-  #     credentialName: blog-app-domain-cert-prod
-  #   hosts:
-  #   - "blogapp.magdalani.com"
+    - "blogapp.magdalani.com"
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: blog-app-domain-cert-prod
+    hosts:
+    - "blogapp.magdalani.com"
 ---
 apiVersion: networking.istio.io/v1
 kind: VirtualService
