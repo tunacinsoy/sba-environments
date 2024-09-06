@@ -17,16 +17,6 @@ spec:
     # hosts: ["myblog.com"]: Accepts traffic only for myblog.coms
     hosts:
     - "blogapp.magdalani.com"
-  - port:
-      number: 443
-      name: https
-      protocol: HTTPS
-    tls:
-      mode: SIMPLE
-      credentialName: blog-app-domain-cert-prod
-    hosts:
-    - "blogapp.magdalani.com"
-
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -35,19 +25,11 @@ metadata:
   namespace: blog-app
 spec:
   hosts:
-  - "*"
+  - "blogapp.magdalani.com"
   gateways:
   - blog-app-gateway
   http:
   - match:
-    - uri:
-        prefix: /.well-known/acme-challenge
-    route:
-    - destination:
-        host: cm-acme-http-solver-q4lg4.istio-system.svc.cluster.local  # Replace with the actual service name
-        port:
-          number: 8089
-
     - uri:
         exact: /
     - uri:
