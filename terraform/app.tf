@@ -30,19 +30,19 @@ resource "kubectl_manifest" "istio" {
   override_namespace = "argocd"
 }
 
-# Cert-manager chart for the digital certificate creation
-data "kubectl_file_documents" "cert-manager" {
-    content = file("../manifests/argocd/cert-manager.yaml")
-}
+# # Cert-manager chart for the digital certificate creation
+# data "kubectl_file_documents" "cert-manager" {
+#     content = file("../manifests/argocd/cert-manager.yaml")
+# }
 
-resource "kubectl_manifest" "cert-manager" {
-  depends_on = [
-    kubectl_manifest.argocd,
-  ]
-  for_each  = data.kubectl_file_documents.cert-manager.manifests
-  yaml_body = each.value
-  override_namespace = "argocd"
-}
+# resource "kubectl_manifest" "cert-manager" {
+#   depends_on = [
+#     kubectl_manifest.argocd,
+#   ]
+#   for_each  = data.kubectl_file_documents.cert-manager.manifests
+#   yaml_body = each.value
+#   override_namespace = "argocd"
+# }
 
 # I am done with externalSecrets, a lot of problems
 # Managing Secrets using ExternalSecrets Operator
