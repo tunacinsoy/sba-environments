@@ -18,7 +18,7 @@ spec:
     # tls:
     #   httpsRedirect: false # Handle redirect in the VirtualService
     hosts:
-    - "blogapp.magdalani.com"
+    - "*"
   - port:
       number: 443
       name: https
@@ -28,6 +28,35 @@ spec:
       credentialName: blog-app-domain-cert-prod
     hosts:
     - "blogapp.magdalani.com"
+
+# apiVersion: networking.istio.io/v1alpha3
+# kind: Gateway
+# metadata:
+#   name: blog-app-gateway
+#   namespace: blog-app
+# spec:
+#   selector:
+#     istio: ingress
+#   servers:
+#   - port:
+#       number: 80
+#       name: http
+#       protocol: HTTP
+#     hosts:
+#     - "*"
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
 apiVersion: networking.istio.io/v1
 kind: VirtualService
