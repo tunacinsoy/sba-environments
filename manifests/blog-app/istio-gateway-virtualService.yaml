@@ -17,8 +17,8 @@ spec:
     # hosts: ["myblog.com"]: Accepts traffic only for myblog.com
     tls:
       httpsRedirect: false # Handle redirect in the VirtualService
-    hosts:
-    - "blogapp.magdalani.com"
+    # hosts:
+    # - "blogapp.magdalani.com"
   - port:
       number: 443
       name: https
