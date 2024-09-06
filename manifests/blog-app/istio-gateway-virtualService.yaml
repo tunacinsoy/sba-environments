@@ -41,6 +41,8 @@ spec:
   http:
   - match:
     - uri:
+        prefix: /.well-known/acme-challenge
+    - uri:
         exact: /
     - uri:
         prefix: /static
