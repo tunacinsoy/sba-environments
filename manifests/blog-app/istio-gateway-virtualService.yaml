@@ -41,7 +41,7 @@ spec:
   http:
   - match:
     - uri:
-        prefix: /
+        exact: /
     - uri:
         prefix: /static
     - uri:
@@ -56,8 +56,6 @@ spec:
         exact: /updateprofile
     route:
     - destination:
-        # Since this resource is already deployed to same namespace that frontend service in, it can access that service just by its name.
-        # However, if they were in different namespaces, we should've written something like: frontend.blog-app.svc.cluster.local
         host: frontend
         port:
           number: 80
