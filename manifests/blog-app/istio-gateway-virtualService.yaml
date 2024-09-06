@@ -1,62 +1,49 @@
-# Gateway is a CustomResourceDefinition that helps to define how the external-traffic should be handled
-apiVersion: networking.istio.io/v1
-kind: Gateway
-metadata:
-  name: blog-app-gateway
-  namespace: istio-system
-spec:
-  selector:
-    # istio-ingress service (which was deployed to namespace istio-ingress) has the following label
-    istio: ingress
-  servers:
-  - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    # Accepts traffic from any hostname. It’s like saying, “I don’t care who’s knocking, let everyone in.”
-    # hosts: ["myblog.com"]: Accepts traffic only for myblog.com
-    # tls:
-    #   httpsRedirect: false # Handle redirect in the VirtualService
-    hosts:
-    - "*"
-  - port:
-      number: 443
-      name: https
-      protocol: HTTPS
-    tls:
-      mode: SIMPLE
-      credentialName: blog-app-domain-cert-prod
-    hosts:
-    - "blogapp.magdalani.com"
-
-# apiVersion: networking.istio.io/v1alpha3
+# # Gateway is a CustomResourceDefinition that helps to define how the external-traffic should be handled
+# apiVersion: networking.istio.io/v1
 # kind: Gateway
 # metadata:
 #   name: blog-app-gateway
-#   namespace: blog-app
+#   namespace: istio-system
 # spec:
 #   selector:
+#     # istio-ingress service (which was deployed to namespace istio-ingress) has the following label
 #     istio: ingress
 #   servers:
 #   - port:
 #       number: 80
 #       name: http
 #       protocol: HTTP
+#     # Accepts traffic from any hostname. It’s like saying, “I don’t care who’s knocking, let everyone in.”
+#     # hosts: ["myblog.com"]: Accepts traffic only for myblog.com
+#     # tls:
+#     #   httpsRedirect: false # Handle redirect in the VirtualService
 #     hosts:
 #     - "*"
+#   - port:
+#       number: 443
+#       name: https
+#       protocol: HTTPS
+#     tls:
+#       mode: SIMPLE
+#       credentialName: blog-app-domain-cert-prod
+#     hosts:
+#     - "blogapp.magdalani.com"
 
-
-
-
-
-
-
-
-
-
-
-
-
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: blog-app-gateway
+  namespace: blog-app
+spec:
+  selector:
+    istio: ingress
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
 ---
 apiVersion: networking.istio.io/v1
 kind: VirtualService
