@@ -58,13 +58,6 @@ spec:
   - blog-app-gateway
   http:
   - match:
-   - uri:
-        prefix: /
-      scheme:
-        exact: http
-    redirect:
-      scheme: https
-      redirectCode: 302
     - uri:
         exact: /
     - uri:
