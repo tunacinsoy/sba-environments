@@ -42,6 +42,12 @@ spec:
   - match:
     - uri:
         prefix: /.well-known/acme-challenge
+    route:
+    - destination:
+        host: cm-acme-http-solver-q4lg4.istio-system.svc.cluster.local  # Replace with the actual service name
+        port:
+          number: 8089
+
     - uri:
         exact: /
     - uri:
