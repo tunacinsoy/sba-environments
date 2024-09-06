@@ -40,21 +40,6 @@ spec:
   # This resource applies to this gateway.
   - blog-app-gateway
   http:
-  - match:
-    - uri:
-        exact: /
-    - uri:
-        prefix: /static
-    - uri:
-        prefix: /posts
-    - uri:
-        exact: /login
-    - uri:
-        exact: /logout
-    - uri:
-        exact: /register
-    - uri:
-        exact: /updateprofile
     route:
     - destination:
         # Since this resource is already deployed to same namespace that frontend service in, it can access that service just by its name.
@@ -62,3 +47,19 @@ spec:
         host: frontend
         port:
           number: 80
+
+# - match:
+#     - uri:
+#         exact: /
+#     - uri:
+#         prefix: /static
+#     - uri:
+#         prefix: /posts
+#     - uri:
+#         exact: /login
+#     - uri:
+#         exact: /logout
+#     - uri:
+#         exact: /register
+#     - uri:
+#         exact: /updateprofile
