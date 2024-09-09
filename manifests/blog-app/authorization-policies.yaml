@@ -56,7 +56,8 @@ spec:
   rules:
   - from:
     - source:
-        principals: ["cluster.local/ns/blog-app/sa/reviews"]
+        principals:
+          - "cluster.local/ns/blog-app/sa/reviews"
 ---
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
