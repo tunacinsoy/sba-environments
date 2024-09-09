@@ -12,9 +12,7 @@ spec:
   rules:
   - from:
     - source:
-        matchLabels:
-          app: frontend
-        # principals: ["cluster.local/ns/blog-app/sa/frontend"]
+      principals: ["cluster.local/ns/blog-app/sa/frontend"]
 ---
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
@@ -30,9 +28,7 @@ spec:
   rules:
   - from:
     - source:
-        matchLabels:
-          app: frontend
-        # principals: ["cluster.local/ns/blog-app/sa/frontend"]
+      principals: ["cluster.local/ns/blog-app/sa/frontend"]
 ---
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
@@ -47,9 +43,7 @@ spec:
   rules:
   - from:
     - source:
-        matchLabels:
-          app: frontend
-        # principals: ["cluster.local/ns/blog-app/sa/frontend"]
+      principals: ["cluster.local/ns/blog-app/sa/frontend"]
 ---
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
@@ -64,9 +58,7 @@ spec:
   rules:
   - from:
     - source:
-        matchLabels:
-          app: reviews
-        # principals: ["cluster.local/ns/blog-app/sa/reviews"]
+      principals: ["cluster.local/ns/blog-app/sa/reviews"]
 ---
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
@@ -81,15 +73,4 @@ spec:
   rules:
   - from:
     - source:
-        matchLabels:
-          app: posts
-    - source:
-        matchLabels:
-          app: reviews
-    - source:
-        matchLabels:
-          app: ratings
-    - source:
-        matchLabels:
-          app: users
-        # principals: ["cluster.local/ns/blog-app/sa/posts", "cluster.local/ns/blog-app/sa/reviews", "cluster.local/ns/blog-app/sa/ratings", "cluster.local/ns/blog-app/sa/users"]
+      principals: ["cluster.local/ns/blog-app/sa/posts", "cluster.local/ns/blog-app/sa/reviews", "cluster.local/ns/blog-app/sa/ratings", "cluster.local/ns/blog-app/sa/users"]
