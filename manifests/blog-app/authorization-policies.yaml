@@ -1,4 +1,3 @@
-# This manifest file is responsible for the communication allowances between services deployed in blog-app namespace.
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
 metadata:
@@ -12,7 +11,7 @@ spec:
   rules:
   - from:
     - source:
-      principals: ["cluster.local/ns/blog-app/sa/frontend"]
+        principals: ["cluster.local/ns/blog-app/sa/frontend"]
 ---
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
@@ -23,12 +22,11 @@ spec:
   selector:
     matchLabels:
       app: reviews
-  # Any traffic that does not match the ALLOW rules will be denied by default
   action: ALLOW
   rules:
   - from:
     - source:
-      principals: ["cluster.local/ns/blog-app/sa/frontend"]
+        principals: ["cluster.local/ns/blog-app/sa/frontend"]
 ---
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
@@ -43,7 +41,7 @@ spec:
   rules:
   - from:
     - source:
-      principals: ["cluster.local/ns/blog-app/sa/frontend"]
+        principals: ["cluster.local/ns/blog-app/sa/frontend"]
 ---
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
@@ -58,7 +56,7 @@ spec:
   rules:
   - from:
     - source:
-      principals: ["cluster.local/ns/blog-app/sa/reviews"]
+        principals: ["cluster.local/ns/blog-app/sa/reviews"]
 ---
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
@@ -73,4 +71,4 @@ spec:
   rules:
   - from:
     - source:
-      principals: ["cluster.local/ns/blog-app/sa/posts", "cluster.local/ns/blog-app/sa/reviews", "cluster.local/ns/blog-app/sa/ratings", "cluster.local/ns/blog-app/sa/users"]
+        principals: ["cluster.local/ns/blog-app/sa/posts", "cluster.local/ns/blog-app/sa/reviews", "cluster.local/ns/blog-app/sa/ratings", "cluster.local/ns/blog-app/sa/users"]
