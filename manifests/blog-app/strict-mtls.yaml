@@ -1,9 +1,0 @@
-# This manifest file is responsible for enabling mutual transport layer security (tls) between services in blog-app namespace.
-apiVersion: security.istio.io/v1
-kind: PeerAuthentication
-metadata:
-  name: default
-  namespace: blog-app
-spec:
-  mtls:
-    mode: STRICT
