@@ -60,7 +60,8 @@ spec:
   selector:
     app: mongodb
   ports:
-    - protocol: TCP
+    - name: tcp-5000 # MongoDB does not use HTTP for its primary communication protocol. Instead, MongoDB uses a custom, binary, TCP-based protocol called the MongoDB Wire Protocol
+      protocol: TCP
       port: 27017
       targetPort: 27017
 ---
@@ -114,7 +115,8 @@ spec:
   selector:
     app: posts
   ports:
-    - protocol: TCP
+    - name: http-5000
+      protocol: TCP
       port: 5000
       targetPort: 5000
 ---
@@ -167,7 +169,8 @@ spec:
   selector:
     app: reviews
   ports:
-    - protocol: TCP
+    - name: http-5000
+      protocol: TCP
       port: 5000
       targetPort: 5000
 ---
@@ -220,7 +223,8 @@ spec:
   selector:
     app: ratings
   ports:
-    - protocol: TCP
+    - name: http-5000
+      protocol: TCP
       port: 5000
       targetPort: 5000
 ---
@@ -273,7 +277,8 @@ spec:
   selector:
     app: users
   ports:
-    - protocol: TCP
+    - name: http-5000
+      protocol: TCP
       port: 5000
       targetPort: 5000
 ---
@@ -318,6 +323,7 @@ spec:
   # We'll use istio-ingress, that's why using LoadBalancer type of service would be redundant for frontend service
   type: ClusterIP
   ports:
-    - protocol: TCP
+    - name: http-80
+      protocol: TCP
       port: 80
       targetPort: 5000
