@@ -6,6 +6,8 @@ metadata:
   creationTimestamp: null
   name: mongodb-creds
   namespace: blog-app
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"  # Deploy this second after namespace creation
 spec:
   encryptedData:
     MONGO_INITDB_ROOT_PASSWORD: AgBnWdDLUUbYmvhk1xj1nEBpK9rn9RsVGkHHfF2NF3XKJ3QYY4VcLFgvVD/q7iENb43KEBWRGhtnI8USrO8yh/m3lvxHgMYjJm5YtRUzOPeXyl8zCSuFW5oY3mAmiVR9iGM+8zaj17gFdwOv79hLSNhWQneThGFgVKOxURC+iI4icBNTsnYTHsjMlkLmNXW03nc9gYL2P3mbV3/9x6BF1c82nej/ygW5eDMykActksKuawkEgleZhlStDK12jidIUHtBtf2mVs4yRI9UbNpjV/bFDGcg1lrgIu2sqRMotBrNig/oxm1gIRtJYbWKKnDP3tRQYmCzcW63gh1ehFUFGH7n8mNQkJSy90A5aY1DA/+vznOVtRtsbjxluGbuU6REZhz5G9p3lbjzSHCsCXvo0/IbIAoMPJyjAVGphhIFHsmU6kACn/3yDucanac6GH/lsp5qHXWpeyuBXeikJ8f2eVASkHkS/x8tBN3mbSd5dGUaSfXWc73qUv2zpP+aUH7bEbY2tCn+M1nuXIuQO2aZufWbv8YUutiaA7DV8q/E9ObHoOKpSSYORVQV5Z3vQNXPeTpnbCDS8p9ugJ4spZl3znDbZHwKjBNSAE3CEptQRf6gBhUGsfV219Ctket2XuOYoeFJ7Ky/1LuK1TXoClZZoaUIYh250Yp96lwVqovGNp3AQlWvbegzBk7BxFMM77+xRKvOpz7aoNVAM7zJ+/9q
