@@ -12,13 +12,18 @@ jobs:
     needs: [create-environment-and-deploy-app]
     uses: ./.github/workflows/run-tests.yml
     secrets: inherit
+  format-images:
+    name: Format Images into SHA256 Digest Format
+    needs: [run-tests]
+    uses: ./.github/workflows/format-images.yml
+    secrets: inherit
   binary-auth:
     name: Attest Images
-    needs: [run-tests]
+    needs: [format-images]
     uses: ./.github/workflows/attest-images.yml
     secrets: inherit
   raise-pull-request:
-    name: Raise PR to prod branch
+    name: Raise PR to Prod Branch
     needs: [binary-auth]
     uses: ./.github/workflows/raise-pr.yml
     secrets: inherit
