@@ -1,3 +1,5 @@
+# This file is responsible for defining allowed and disallowed traffics between different workloads/services (By workload, we mean actual pods).
+# It uses principals, that's why each individual deployment within blog-app deployment should have ServiceAccount associated to them.
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
 metadata:
