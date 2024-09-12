@@ -4,7 +4,7 @@ metadata:
   name: frontend
   namespace: blog-app
 spec:
-  host: frontend.blog-app.svc.cluster.local
+  host: frontend
   subsets:
   - name: v1
     labels:
@@ -16,7 +16,7 @@ metadata:
   name: posts
   namespace: blog-app
 spec:
-  host: posts.blog-app.svc.cluster.local
+  host: posts
   subsets:
   - name: v1
     labels:
@@ -28,7 +28,7 @@ metadata:
   name: users
   namespace: blog-app
 spec:
-  host: users.blog-app.svc.cluster.local
+  host: users
   subsets:
   - name: v1
     labels:
@@ -40,7 +40,7 @@ metadata:
   name: reviews
   namespace: blog-app
 spec:
-  host: reviews.blog-app.svc.cluster.local
+  host: reviews
   subsets:
   - name: v1
     labels:
@@ -52,7 +52,7 @@ metadata:
   name: ratings
   namespace: blog-app
 spec:
-  host: ratings.blog-app.svc.cluster.local
+  host: ratings
   subsets:
   - name: v1
     labels:
