@@ -179,42 +179,42 @@ kind: ServiceAccount
 metadata:
   name: ratings
   namespace: blog-app
-# ---
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: ratings
-#   namespace: blog-app
-# spec:
-#   replicas: 1
-#   selector:
-#     matchLabels:
-#       app: ratings
-#       version: v1
-#   template:
-#     metadata:
-#       labels:
-#         app: ratings
-#         version: v1
-#     spec:
-#       serviceAccountName: ratings
-#       containers:
-#         - name: ratings
-#           image: docker.io/tunacinsoy/sba-ratings@sha256:c20883b45f92194a14ab093ca1c10d019b93a8458cead1a0645a2b762885627e
-#           imagePullPolicy: Always
-#           ports:
-#             - containerPort: 5000
-#           env:
-#             - name: MONGODB_USERNAME
-#               valueFrom:
-#                 secretKeyRef:
-#                   name: mongodb-creds
-#                   key: MONGO_INITDB_ROOT_USERNAME
-#             - name: MONGODB_PASSWORD
-#               valueFrom:
-#                 secretKeyRef:
-#                   name: mongodb-creds
-#                   key: MONGO_INITDB_ROOT_PASSWORD
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ratings-v1
+  namespace: blog-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ratings
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: ratings
+        version: v1
+    spec:
+      serviceAccountName: ratings
+      containers:
+        - name: ratings
+          image: docker.io/tunacinsoy/sba-ratings@sha256:c20883b45f92194a14ab093ca1c10d019b93a8458cead1a0645a2b762885627e
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-creds
+                  key: MONGO_INITDB_ROOT_USERNAME
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-creds
+                  key: MONGO_INITDB_ROOT_PASSWORD
 ---
 apiVersion: v1
 kind: Service
