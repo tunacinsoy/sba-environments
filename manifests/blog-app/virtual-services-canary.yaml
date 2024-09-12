@@ -1,3 +1,6 @@
+# VirtualService that are defined in this manifest file don't specify gateway (spec.gateway).
+# This means that they are only handling internal service-to-service communication within the mesh.
+
 ---
 apiVersion: networking.istio.io/v1
 kind: VirtualService

@@ -1,3 +1,7 @@
+# DestinationRule resource handles how the destination should handle incoming traffic.
+# In this manifest file, we are defining 'subsets' for each version of the service.
+# Then, these subsets are getting used in virtual-services-canary.yaml file to route incoming traffic.
+---
 apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:

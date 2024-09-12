@@ -1,5 +1,5 @@
 # Gateway is a CustomResourceDefinition that helps to define how the external-traffic should be handled
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1
 kind: Gateway
 metadata:
   name: blog-app-gateway
@@ -18,7 +18,7 @@ spec:
     # hosts: ["myblog.com"]: Accepts traffic only for myblog.com
     - "*"
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
   name: blog-app
@@ -26,6 +26,10 @@ metadata:
 spec:
   hosts:
   - "*"
+  # This VirtualService specifies a gateway (blog-app-gateway).
+  # This indicates that it controls external traffic entering the mesh via this gateway.
+  # The gateway listens for incoming requests from outside the cluster (e.g., users accessing your app via a web browser)
+  # and forwards them to services inside the mesh based on the rules defined in the VirtualService.
   gateways:
   - blog-app-gateway
   http:
