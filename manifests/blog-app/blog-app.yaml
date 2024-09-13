@@ -1,7 +1,6 @@
 # This document is responsible with the whole deployment of blog-app application.
 # it also includes serviceAccount resource that are associated with the respective pods, to use them later during ./authorization-policies.yaml definition.
 --- # Acts as a document seperator, kubernetes applies the manifest file that is before this line (for instance -> we want to create namespace resource first)
-# MONGODB
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -418,14 +417,15 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
-          requests:
-            cpu: "100m"
-            memory: "150Mi"
-            ephemeral-storage: "100Mi"
-          limits:
-            cpu: "300m"
-            memory: "500Mi"
-            ephemeral-storage: "300Mi"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "150Mi"
+              ephemeral-storage: "100Mi"
+            limits:
+              cpu: "300m"
+              memory: "500Mi"
+              ephemeral-storage: "300Mi"
 
 ---
 apiVersion: v1
