@@ -17,7 +17,7 @@
 #   location             = var.location
 #   use_private_endpoint = false
 # }
-
+#
 # # Manifest file that creates argocd namespace
 # data "kubectl_file_documents" "namespace" {
 #   content = file("../manifests/argocd/namespace.yaml")
