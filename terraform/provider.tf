@@ -18,15 +18,17 @@ provider "kubectl" {
 
 terraform {
   required_providers {
-    # kubectl = {
-    #   source  = "gavinbunney/kubectl"
-    #   version = "1.14.0"
-    # }
-    time = {
-      source = "hashicorp/time"
-      version = "0.12.1"
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = "1.14.0"
     }
   }
+
+  #  time = {
+  #     source = "hashicorp/time"
+  #     version = "0.12.1"
+  #   }
+
   backend "gcs" {
     # Terraform state files will be located in the following path:
     # tf-state-sba-terraform-${{ secrets.PROJECT_ID }}/sba-terraform/${GITHUB_REF##*/}.tfstate
