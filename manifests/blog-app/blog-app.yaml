@@ -32,8 +32,14 @@ spec:
           ports:
             - containerPort: 27017
           resources:
+            requests:
+              cpu: "100m"
+              memory: "150Mi"
+              ephemeral-storage: "100Mi"
             limits:
-              ephemeral-storage: "5Gi"
+              cpu: "300m"
+              memory: "500Mi"
+              ephemeral-storage: "300Mi"
           envFrom:
             - secretRef:
                 name: mongodb-creds
@@ -101,8 +107,14 @@ spec:
           ports:
             - containerPort: 5000
           resources:
+            requests:
+              cpu: "100m"
+              memory: "150Mi"
+              ephemeral-storage: "100Mi"
             limits:
-              ephemeral-storage: "1Gi"
+              cpu: "300m"
+              memory: "500Mi"
+              ephemeral-storage: "300Mi"
           env:
             - name: MONGODB_USERNAME
               valueFrom:
@@ -161,8 +173,14 @@ spec:
           ports:
             - containerPort: 5000
           resources:
+            requests:
+              cpu: "100m"
+              memory: "150Mi"
+              ephemeral-storage: "100Mi"
             limits:
-              ephemeral-storage: "1Gi"
+              cpu: "300m"
+              memory: "500Mi"
+              ephemeral-storage: "300Mi"
           env:
             - name: MONGODB_USERNAME
               valueFrom:
@@ -221,8 +239,14 @@ spec:
           ports:
             - containerPort: 5000
           resources:
+            requests:
+              cpu: "100m"
+              memory: "150Mi"
+              ephemeral-storage: "100Mi"
             limits:
-              ephemeral-storage: "1Gi"
+              cpu: "300m"
+              memory: "500Mi"
+              ephemeral-storage: "300Mi"
           env:
             - name: MONGODB_USERNAME
               valueFrom:
@@ -274,10 +298,16 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
-          resources:
+         resources:
+            requests:
+              cpu: "100m"
+              memory: "150Mi"
+              ephemeral-storage: "100Mi"
             limits:
-              ephemeral-storage: "1Gi"
-          env:
+              cpu: "300m"
+              memory: "500Mi"
+              ephemeral-storage: "300Mi"
+           env:
             - name: MONGODB_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -321,8 +351,14 @@ spec:
           ports:
             - containerPort: 5000
           resources:
+            requests:
+              cpu: "100m"
+              memory: "150Mi"
+              ephemeral-storage: "100Mi"
             limits:
-              ephemeral-storage: "1Gi"
+              cpu: "300m"
+              memory: "500Mi"
+              ephemeral-storage: "300Mi"
           env:
             - name: MONGODB_USERNAME
               valueFrom:
@@ -382,9 +418,15 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
-          resources:
-            limits:
-              ephemeral-storage: "2Gi"
+          requests:
+            cpu: "100m"
+            memory: "150Mi"
+            ephemeral-storage: "100Mi"
+          limits:
+            cpu: "300m"
+            memory: "500Mi"
+            ephemeral-storage: "300Mi"
+
 ---
 apiVersion: v1
 kind: Service
