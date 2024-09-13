@@ -1,382 +1,382 @@
-# This document is responsible with the whole deployment of blog-app application.
-# it also includes serviceAccount resource that are associated with the respective pods, to use them later during ./authorization-policies.yaml definition.
---- # Acts as a document seperator, kubernetes applies the manifest file that is before this line (for instance -> we want to create namespace resource first)
-# MONGODB
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: mongodb
-  namespace: blog-app
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: mongodb
-  namespace: blog-app
-spec:
-  serviceName: mongodb
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mongodb
-  template:
-    metadata:
-      labels:
-        app: mongodb
-    spec:
-      serviceAccountName: mongodb
-      containers:
-        - name: mongodb
-          image: docker.io/library/mongo@sha256:e64f27edef80b41715e5830312da25ea5e6874a2b62ed1adb3e8f74bde7475a6
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 27017
-          envFrom:
-            - secretRef:
-                name: mongodb-creds
-          volumeMounts:
-            - name: mongodb-data
-              mountPath: /data/db
-      volumes:
-        - name: mongodb-data
-          persistentVolumeClaim:
-            claimName: mongodb-data
-  volumeClaimTemplates:
-    - metadata:
-        name: mongodb-data
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 10Gi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mongodb
-  namespace: blog-app
-spec:
-  clusterIP: None
-  selector:
-    app: mongodb
-  ports:
-    - name: tcp # MongoDB does not use HTTP for its primary communication protocol. Instead, MongoDB uses a custom, binary, TCP-based protocol called the MongoDB Wire Protocol
-      protocol: TCP
-      port: 27017
-      targetPort: 27017
----
-# POSTS-V1
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: posts
-  namespace: blog-app
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: posts-v1
-  namespace: blog-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: posts
-      version: v1
-  template:
-    metadata:
-      labels:
-        app: posts
-        version: v1
-    spec:
-      serviceAccountName: posts
-      containers:
-        - name: posts
-          image: docker.io/tunacinsoy/sba-posts@sha256:54245463f0b41501c871c0cba14029583d6c5fd0bc8e202fa5201db6ab52d46d
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 5000
-          env:
-            - name: MONGODB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: mongodb-creds
-                  key: MONGO_INITDB_ROOT_USERNAME
-            - name: MONGODB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mongodb-creds
-                  key: MONGO_INITDB_ROOT_PASSWORD
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: posts
-  namespace: blog-app
-spec:
-  selector:
-    app: posts
-  ports:
-    - name: http # istio naming convention asks you to modify the name according to protocol (http, https, grpc etc.)
-      protocol: TCP
-      port: 5000
-      targetPort: 5000
----
-# REVIEWS-V1
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: reviews
-  namespace: blog-app
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: reviews-v1
-  namespace: blog-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: reviews
-      version: v1
-  template:
-    metadata:
-      labels:
-        app: reviews
-        version: v1
-    spec:
-      serviceAccountName: reviews
-      containers:
-        - name: reviews
-          image: docker.io/tunacinsoy/sba-reviews@sha256:66d7f398d5b2f5a28e68776adb26fe6931eb9099ab8195e2cb36e9e0ae8620b5
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 5000
-          env:
-            - name: MONGODB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: mongodb-creds
-                  key: MONGO_INITDB_ROOT_USERNAME
-            - name: MONGODB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mongodb-creds
-                  key: MONGO_INITDB_ROOT_PASSWORD
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: reviews
-  namespace: blog-app
-spec:
-  selector:
-    app: reviews
-  ports:
-    - name: http
-      protocol: TCP
-      port: 5000
-      targetPort: 5000
----
-# RATINGS-V1
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: ratings
-  namespace: blog-app
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: ratings-v1
-  namespace: blog-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: ratings
-      version: v1
-  template:
-    metadata:
-      labels:
-        app: ratings
-        version: v1
-    spec:
-      serviceAccountName: ratings
-      containers:
-        - name: ratings
-          image: docker.io/tunacinsoy/sba-ratings@sha256:c20883b45f92194a14ab093ca1c10d019b93a8458cead1a0645a2b762885627e
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 5000
-          env:
-            - name: MONGODB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: mongodb-creds
-                  key: MONGO_INITDB_ROOT_USERNAME
-            - name: MONGODB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mongodb-creds
-                  key: MONGO_INITDB_ROOT_PASSWORD
----
-# RATINGS-V2
-apiVersion: v1
-kind: Service
-metadata:
-  name: ratings
-  namespace: blog-app
-spec:
-  selector:
-    app: ratings
-  ports:
-    - name: http
-      protocol: TCP
-      port: 5000
-      targetPort: 5000
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: ratings-v2
-  namespace: blog-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: ratings
-      version: v2
-  template:
-    metadata:
-      labels:
-        app: ratings
-        version: v2
-    spec:
-      serviceAccountName: ratings
-      containers:
-        - name: ratings
-          image: docker.io/tunacinsoy/sba-ratings@sha256:5f83c94c547d15c5364b8b6ec33925e2cc655a75b91961131729ccf934fe2026
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 5000
-          env:
-            - name: MONGODB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: mongodb-creds
-                  key: MONGO_INITDB_ROOT_USERNAME
-            - name: MONGODB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mongodb-creds
-                  key: MONGO_INITDB_ROOT_PASSWORD
----
-## USERS
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: users
-  namespace: blog-app
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: users-v1
-  namespace: blog-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: users
-      version: v1
-  template:
-    metadata:
-      labels:
-        app: users
-        version: v1
-    spec:
-      serviceAccountName: users
-      containers:
-        - name: users
-          image: docker.io/tunacinsoy/sba-users@sha256:106c04abd8bfe3ff1f5c57031b67f4beee8d159ae4d51a0ccca1470f383e064a
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 5000
-          env:
-            - name: MONGODB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: mongodb-creds
-                  key: MONGO_INITDB_ROOT_USERNAME
-            - name: MONGODB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mongodb-creds
-                  key: MONGO_INITDB_ROOT_PASSWORD
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: users
-  namespace: blog-app
-spec:
-  selector:
-    app: users
-  ports:
-    - name: http
-      protocol: TCP
-      port: 5000
-      targetPort: 5000
----
-## FRONTEND
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: frontend
-  namespace: blog-app
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: frontend-v1
-  namespace: blog-app
-  labels:
-    version: v1
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: frontend
-      version: v1
-  template:
-    metadata:
-      labels:
-        app: frontend
-        version: v1
-    spec:
-      serviceAccountName: frontend
-      containers:
-        - name: frontend
-          image: docker.io/tunacinsoy/sba-frontend@sha256:2b3e487a38e77bc20c370468592c03d8b6eb080d0f315b1e04a7a0a57091f292
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 5000
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: frontend
-  namespace: blog-app
-spec:
-  selector:
-    app: frontend
-  # We'll use istio-ingress, that's why using LoadBalancer type of service would be redundant for frontend service
-  type: ClusterIP
-  ports:
-    - name: http
-      protocol: TCP
-      port: 80
-      targetPort: 5000
+# # This document is responsible with the whole deployment of blog-app application.
+# # it also includes serviceAccount resource that are associated with the respective pods, to use them later during ./authorization-policies.yaml definition.
+# --- # Acts as a document seperator, kubernetes applies the manifest file that is before this line (for instance -> we want to create namespace resource first)
+# # MONGODB
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: mongodb
+#   namespace: blog-app
+# ---
+# apiVersion: apps/v1
+# kind: StatefulSet
+# metadata:
+#   name: mongodb
+#   namespace: blog-app
+# spec:
+#   serviceName: mongodb
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: mongodb
+#   template:
+#     metadata:
+#       labels:
+#         app: mongodb
+#     spec:
+#       serviceAccountName: mongodb
+#       containers:
+#         - name: mongodb
+#           image: docker.io/library/mongo@sha256:e64f27edef80b41715e5830312da25ea5e6874a2b62ed1adb3e8f74bde7475a6
+#           imagePullPolicy: Always
+#           ports:
+#             - containerPort: 27017
+#           envFrom:
+#             - secretRef:
+#                 name: mongodb-creds
+#           volumeMounts:
+#             - name: mongodb-data
+#               mountPath: /data/db
+#       volumes:
+#         - name: mongodb-data
+#           persistentVolumeClaim:
+#             claimName: mongodb-data
+#   volumeClaimTemplates:
+#     - metadata:
+#         name: mongodb-data
+#       spec:
+#         accessModes:
+#           - ReadWriteOnce
+#         resources:
+#           requests:
+#             storage: 10Gi
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: mongodb
+#   namespace: blog-app
+# spec:
+#   clusterIP: None
+#   selector:
+#     app: mongodb
+#   ports:
+#     - name: tcp # MongoDB does not use HTTP for its primary communication protocol. Instead, MongoDB uses a custom, binary, TCP-based protocol called the MongoDB Wire Protocol
+#       protocol: TCP
+#       port: 27017
+#       targetPort: 27017
+# ---
+# # POSTS-V1
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: posts
+#   namespace: blog-app
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: posts-v1
+#   namespace: blog-app
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: posts
+#       version: v1
+#   template:
+#     metadata:
+#       labels:
+#         app: posts
+#         version: v1
+#     spec:
+#       serviceAccountName: posts
+#       containers:
+#         - name: posts
+#           image: docker.io/tunacinsoy/sba-posts@sha256:54245463f0b41501c871c0cba14029583d6c5fd0bc8e202fa5201db6ab52d46d
+#           imagePullPolicy: Always
+#           ports:
+#             - containerPort: 5000
+#           env:
+#             - name: MONGODB_USERNAME
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mongodb-creds
+#                   key: MONGO_INITDB_ROOT_USERNAME
+#             - name: MONGODB_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mongodb-creds
+#                   key: MONGO_INITDB_ROOT_PASSWORD
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: posts
+#   namespace: blog-app
+# spec:
+#   selector:
+#     app: posts
+#   ports:
+#     - name: http # istio naming convention asks you to modify the name according to protocol (http, https, grpc etc.)
+#       protocol: TCP
+#       port: 5000
+#       targetPort: 5000
+# ---
+# # REVIEWS-V1
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: reviews
+#   namespace: blog-app
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: reviews-v1
+#   namespace: blog-app
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: reviews
+#       version: v1
+#   template:
+#     metadata:
+#       labels:
+#         app: reviews
+#         version: v1
+#     spec:
+#       serviceAccountName: reviews
+#       containers:
+#         - name: reviews
+#           image: docker.io/tunacinsoy/sba-reviews@sha256:66d7f398d5b2f5a28e68776adb26fe6931eb9099ab8195e2cb36e9e0ae8620b5
+#           imagePullPolicy: Always
+#           ports:
+#             - containerPort: 5000
+#           env:
+#             - name: MONGODB_USERNAME
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mongodb-creds
+#                   key: MONGO_INITDB_ROOT_USERNAME
+#             - name: MONGODB_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mongodb-creds
+#                   key: MONGO_INITDB_ROOT_PASSWORD
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: reviews
+#   namespace: blog-app
+# spec:
+#   selector:
+#     app: reviews
+#   ports:
+#     - name: http
+#       protocol: TCP
+#       port: 5000
+#       targetPort: 5000
+# ---
+# # RATINGS-V1
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: ratings
+#   namespace: blog-app
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: ratings-v1
+#   namespace: blog-app
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: ratings
+#       version: v1
+#   template:
+#     metadata:
+#       labels:
+#         app: ratings
+#         version: v1
+#     spec:
+#       serviceAccountName: ratings
+#       containers:
+#         - name: ratings
+#           image: docker.io/tunacinsoy/sba-ratings@sha256:c20883b45f92194a14ab093ca1c10d019b93a8458cead1a0645a2b762885627e
+#           imagePullPolicy: Always
+#           ports:
+#             - containerPort: 5000
+#           env:
+#             - name: MONGODB_USERNAME
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mongodb-creds
+#                   key: MONGO_INITDB_ROOT_USERNAME
+#             - name: MONGODB_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mongodb-creds
+#                   key: MONGO_INITDB_ROOT_PASSWORD
+# ---
+# # RATINGS-V2
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: ratings
+#   namespace: blog-app
+# spec:
+#   selector:
+#     app: ratings
+#   ports:
+#     - name: http
+#       protocol: TCP
+#       port: 5000
+#       targetPort: 5000
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: ratings-v2
+#   namespace: blog-app
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: ratings
+#       version: v2
+#   template:
+#     metadata:
+#       labels:
+#         app: ratings
+#         version: v2
+#     spec:
+#       serviceAccountName: ratings
+#       containers:
+#         - name: ratings
+#           image: docker.io/tunacinsoy/sba-ratings@sha256:5f83c94c547d15c5364b8b6ec33925e2cc655a75b91961131729ccf934fe2026
+#           imagePullPolicy: Always
+#           ports:
+#             - containerPort: 5000
+#           env:
+#             - name: MONGODB_USERNAME
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mongodb-creds
+#                   key: MONGO_INITDB_ROOT_USERNAME
+#             - name: MONGODB_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mongodb-creds
+#                   key: MONGO_INITDB_ROOT_PASSWORD
+# ---
+# ## USERS
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: users
+#   namespace: blog-app
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: users-v1
+#   namespace: blog-app
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: users
+#       version: v1
+#   template:
+#     metadata:
+#       labels:
+#         app: users
+#         version: v1
+#     spec:
+#       serviceAccountName: users
+#       containers:
+#         - name: users
+#           image: docker.io/tunacinsoy/sba-users@sha256:106c04abd8bfe3ff1f5c57031b67f4beee8d159ae4d51a0ccca1470f383e064a
+#           imagePullPolicy: Always
+#           ports:
+#             - containerPort: 5000
+#           env:
+#             - name: MONGODB_USERNAME
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mongodb-creds
+#                   key: MONGO_INITDB_ROOT_USERNAME
+#             - name: MONGODB_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mongodb-creds
+#                   key: MONGO_INITDB_ROOT_PASSWORD
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: users
+#   namespace: blog-app
+# spec:
+#   selector:
+#     app: users
+#   ports:
+#     - name: http
+#       protocol: TCP
+#       port: 5000
+#       targetPort: 5000
+# ---
+# ## FRONTEND
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: frontend
+#   namespace: blog-app
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: frontend-v1
+#   namespace: blog-app
+#   labels:
+#     version: v1
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: frontend
+#       version: v1
+#   template:
+#     metadata:
+#       labels:
+#         app: frontend
+#         version: v1
+#     spec:
+#       serviceAccountName: frontend
+#       containers:
+#         - name: frontend
+#           image: docker.io/tunacinsoy/sba-frontend@sha256:2b3e487a38e77bc20c370468592c03d8b6eb080d0f315b1e04a7a0a57091f292
+#           imagePullPolicy: Always
+#           ports:
+#             - containerPort: 5000
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: frontend
+#   namespace: blog-app
+# spec:
+#   selector:
+#     app: frontend
+#   # We'll use istio-ingress, that's why using LoadBalancer type of service would be redundant for frontend service
+#   type: ClusterIP
+#   ports:
+#     - name: http
+#       protocol: TCP
+#       port: 80
+#       targetPort: 5000
