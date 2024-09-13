@@ -33,7 +33,7 @@ spec:
             - containerPort: 27017
           resources:
             limits:
-              ephemeral-storage: "1Gi"
+              ephemeral-storage: "5Gi"
           envFrom:
             - secretRef:
                 name: mongodb-creds
@@ -102,7 +102,7 @@ spec:
             - containerPort: 5000
           resources:
             limits:
-              ephemeral-storage: "100Mi"
+              ephemeral-storage: "1Gi"
           env:
             - name: MONGODB_USERNAME
               valueFrom:
@@ -162,7 +162,7 @@ spec:
             - containerPort: 5000
           resources:
             limits:
-              ephemeral-storage: "100Mi"
+              ephemeral-storage: "1Gi"
           env:
             - name: MONGODB_USERNAME
               valueFrom:
@@ -222,7 +222,7 @@ spec:
             - containerPort: 5000
           resources:
             limits:
-              ephemeral-storage: "100Mi"
+              ephemeral-storage: "1Gi"
           env:
             - name: MONGODB_USERNAME
               valueFrom:
@@ -276,7 +276,7 @@ spec:
             - containerPort: 5000
           resources:
             limits:
-              ephemeral-storage: "100Mi"
+              ephemeral-storage: "1Gi"
           env:
             - name: MONGODB_USERNAME
               valueFrom:
@@ -322,7 +322,7 @@ spec:
             - containerPort: 5000
           resources:
             limits:
-              ephemeral-storage: "100Mi"
+              ephemeral-storage: "1Gi"
           env:
             - name: MONGODB_USERNAME
               valueFrom:
@@ -384,7 +384,7 @@ spec:
             - containerPort: 5000
           resources:
             limits:
-              ephemeral-storage: "500Mi"
+              ephemeral-storage: "2Gi"
 ---
 apiVersion: v1
 kind: Service
