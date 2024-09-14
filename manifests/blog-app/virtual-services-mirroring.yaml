@@ -43,11 +43,11 @@ spec:
     - destination:
         host: ratings
         subset: v1
-      weight: 20
-    - destination:
-        host: ratings
-        subset: v2
-      weight: 80
+      weight: 100
+    mirror:
+      host: ratings
+      subset: v2
+    mirror_percent: 100
 ---
 apiVersion: networking.istio.io/v1
 kind: VirtualService
