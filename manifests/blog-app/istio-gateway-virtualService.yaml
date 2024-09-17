@@ -25,7 +25,7 @@ metadata:
   namespace: blog-app
 spec:
   hosts:
-  - "*"
+  - "blogapp.magdalani.com"
   # This VirtualService specifies a gateway (blog-app-gateway).
   # This indicates that it controls external traffic entering the mesh via this gateway.
   # The gateway listens for incoming requests from outside the cluster (e.g., users accessing your app via a web browser)
