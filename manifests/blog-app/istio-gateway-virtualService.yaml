@@ -1,0 +1,56 @@
+# Gateway is a CustomResourceDefinition that helps to define how the external-traffic should be handled
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: blog-app-gateway
+  namespace: blog-app
+spec:
+  selector:
+  # istio-ingress service (which was deployed to namespace istio-ingress) has the following label
+    istio: ingress
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    # Accepts traffic from any hostname. It’s like saying, “I don’t care who’s knocking, let everyone in.”
+    # hosts: ["myblog.com"]: Accepts traffic only for myblog.com
+    - "*"
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: blog-app
+  namespace: blog-app
+spec:
+  hosts:
+  - "blogapp.magdalani.com"
+  # This VirtualService specifies a gateway (blog-app-gateway).
+  # This indicates that it controls external traffic entering the mesh via this gateway.
+  # The gateway listens for incoming requests from outside the cluster (e.g., users accessing your app via a web browser)
+  # and forwards them to services inside the mesh based on the rules defined in the VirtualService.
+  gateways:
+  - blog-app-gateway
+  http:
+  - match:
+    - uri:
+        exact: /
+    - uri:
+        prefix: /static
+    - uri:
+        prefix: /posts
+    - uri:
+        exact: /login
+    - uri:
+        exact: /logout
+    - uri:
+        exact: /register
+    - uri:
+        exact: /updateprofile
+    route:
+    - destination:
+        # VirtualService and frontend's service are both deployed in the same namespace, so they can find each other using only names.
+        host: frontend
+        port:
+          number: 80

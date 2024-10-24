@@ -36,9 +36,11 @@ terraform.rc
 # manifests/argocd/external-secrets.yaml
 # manifests/argocd/gcpsm-secret.yaml
 
-# If we want to use external-secrets, these lines should be here.
+# If we want to use external-secrets, these lines should be here
 # However, if they are already being tracked, firstly they should be untracked using:
 # git rm --cached <file>
 # manifests/sealed-secrets/*
 # manifests/sealed-secrets/controller.yaml
 # manifests/blog-app/mongodb-creds-sealed.yaml
+
+letsencrypt.txt

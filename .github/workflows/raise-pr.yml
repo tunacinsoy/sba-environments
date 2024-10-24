@@ -7,7 +7,8 @@ jobs:
       run:
         working-directory: .
     steps:
-      - uses: actions/checkout@v2
+    # checkout@v4 is the latest version for the time being
+      - uses: actions/checkout@v4
       - name: Raise a Pull Request
         id: pull-request
         uses: repo-sync/pull-request@v2

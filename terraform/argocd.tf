@@ -1,7 +1,7 @@
 # This hcl file is responsible for the deployment of argocd to the existing gke cluster.
 
+# This ensures that the delay happens only after the GKE cluster has been created
 resource "time_sleep" "wait_30_seconds" {
-  # This ensures that the delay happens only after the GKE cluster has been created
   depends_on      = [google_container_cluster.main]
   create_duration = "30s"
 }
@@ -18,30 +18,33 @@ module "gke_auth" {
   use_private_endpoint = false
 }
 
+# Manifest file that creates argocd namespace
 data "kubectl_file_documents" "namespace" {
   content = file("../manifests/argocd/namespace.yaml")
 }
 
-data "kubectl_file_documents" "argocd" {
-  content = file("../manifests/argocd/install.yaml")
-}
-
+# Creates argocd namespace within our k8s cluster.
 resource "kubectl_manifest" "namespace" {
   # for_each iterates over each manifest in the namespace file
-  for_each           = data.kubectl_file_documents.namespace.manifests
+  for_each = data.kubectl_file_documents.namespace.manifests
   # Applies the content of each manifest to the Kubernetes cluster
-  yaml_body          = each.value
+  yaml_body = each.value
   # Forces the namespace to be set to argocd, ensuring that all resources are created in the correct namespace
   override_namespace = "argocd"
+}
+
+# Installation script for argocd, retrieved from its repository.
+data "kubectl_file_documents" "argocd" {
+  content = file("../manifests/argocd/install.yaml")
 }
 
 resource "kubectl_manifest" "argocd" {
   # It needs to depend on namespace creation, since we'll deploy argocd into argocd namespace
   depends_on = [kubectl_manifest.namespace]
   # for_each iterates over each manifest in the namespace file
-  for_each           = data.kubectl_file_documents.argocd.manifests
+  for_each = data.kubectl_file_documents.argocd.manifests
   # Applies the content of each manifest to the Kubernetes cluster
-  yaml_body          = each.value
+  yaml_body = each.value
   # Forces the namespace to be set to argocd, ensuring that all resources are created in the correct namespace
   override_namespace = "argocd"
 }

@@ -1,4 +1,5 @@
-# Within this file, argoCD generates the necessary permissions to be able to generate resources within kubernetes cluster.
+# Within this file, argoCD is installed, and also this manifest file generates the necessary permissions
+# for argoCD so that it will be able to generate resources within kubernetes cluster.
 # This is an auto-generated file. DO NOT EDIT
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition

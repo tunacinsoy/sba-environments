@@ -11,9 +11,9 @@ provider "kubectl" {
   host                   = module.gke_auth.host
   cluster_ca_certificate = module.gke_auth.cluster_ca_certificate
   token                  = module.gke_auth.token
-  # Ensures Terraform uses the connection details provided directly in the
+  # Following line ensures that Terraform uses the connection details provided directly in the
   # Terraform configuration (e.g., host, cluster_ca_certificate, token), rather than relying on the local Kubernetes config file (~/.kube/config).
-  load_config_file       = false
+  load_config_file = false
 }
 
 terraform {
@@ -23,6 +23,7 @@ terraform {
       version = "1.14.0"
     }
   }
+
   backend "gcs" {
     # Terraform state files will be located in the following path:
     # tf-state-sba-terraform-${{ secrets.PROJECT_ID }}/sba-terraform/${GITHUB_REF##*/}.tfstate
