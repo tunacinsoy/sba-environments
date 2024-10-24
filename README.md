@@ -1,6 +1,6 @@
 This repository sets up a Google Cloud Platform (GCP) environment with infrastructure automation using Terraform, GitHub Actions for CI/CD, and Kubernetes for application orchestration. It includes the deployment of a GKE cluster, ArgoCD for GitOps, and Istio for service mesh management.
 
-Additionally, you can explore deployments like Canary Deployment and Traffic Mirroring through Istio VirtualService manifests, and monitoring tools like Prometheus, Grafana, Jaeger, and Kiali for observability purposes via ArgoCD dashboard.
+Additionally, you'll find the Traffic Mirroring Strategy through Istio VirtualService manifests, and monitoring tools like Prometheus, Grafana, Jaeger, and Kiali for observability purposes.
 
 #### Step by Step Explanation
 
